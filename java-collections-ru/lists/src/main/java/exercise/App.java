@@ -6,14 +6,13 @@ import java.util.List;
 
 // BEGIN
 public static boolean scrabble(String set, String word) {
-    String lowerSet = set.toLowerCase();
     String lowerWord = word.toLowerCase();
     if (word.length() > set.length()) {
         return false;
     }
     List<String> listSet = new ArrayList<>();
-    for (var i = 0; i < lowerSet.length(); i++) {
-        String x = String.valueOf(lowerSet.charAt(i));
+    for (var i = 0; i < set.length(); i++) {
+        String x = String.valueOf(set.charAt(i));
         listSet.add(i, x);
     }
     for (var i = 0; i < lowerWord.length(); i++) {
@@ -24,12 +23,12 @@ public static boolean scrabble(String set, String word) {
             if (!listSet.contains(z)) {
                 return false;
             } else {
-                listSet.remove(i);
+                int index = listSet.indexOf(z);
+                listSet.remove(index);
                 break;
             }
         }
     }
-    return false;
-}
+    return true;
 }
 //END
