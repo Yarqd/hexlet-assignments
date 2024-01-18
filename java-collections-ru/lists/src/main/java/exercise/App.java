@@ -6,16 +6,24 @@ import java.util.List;
 
 // BEGIN
 public static boolean scrabble(String set, String word) {
-        List<Character> characters = new ArrayList<>();
-        for (char c : set.toCharArray()) {
-            characters.add(c);
+    String lowerSet = set.toLowerCase();
+    String lowerWord = word.toLowerCase();
+    if (word > set) {
+        return false;
         }
-        for (char c : word.toCharArray()) {
-            if (!characters.contains(c)) {
+        List<String> listSet = new ArrayList<>();
+    for (var i = 0; i < lowerSet.length; i++) {
+        listSet[i] = lowerSet.charAt(i);
+        }
+    for (var i = 0; i < lowerWord.length; i++) {
+        char  checkChar = lowerWord.charAt(i);
+        for (var j = 0; j < listSet.length; j++) {
+            if (!listSet.contains(checkChar)) {
                 return false;
-            }
+            } else {
+                listSet.remove(j)
         }
-
+    }
         return true;
-        }
+}
 //END
