@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 // BEGIN
-public static boolean scrabble(String symbols, String word) {
-        String lowerCaseStr = word.toLowerCase();
-        if (symbols.contains(lowerCaseStr)) {
-            return true;
-        } else {
-            return false;
+public static boolean scrabble(String set, String word) {
+        List<Character> characters = new ArrayList<>();
+        for (char c : set.toCharArray()) {
+            characters.add(c);
         }
-}
+        for (char c : word.toCharArray()) {
+            if (!characters.contains(c)) {
+                return false;
+            }
+        }
+
+        return true;
+        }
 //END
