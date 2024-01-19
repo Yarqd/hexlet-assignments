@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // BEGIN
-public class scrabble {
+class App {
     public static boolean scrabble(String set, String word) {
         String lowerWord = word.toLowerCase();
         if (word.length() > set.length()) {
