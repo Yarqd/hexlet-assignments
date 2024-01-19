@@ -16,9 +16,7 @@ public static boolean scrabble(String set, String word) {
         listSet.add(i, x);
     }
     for (var i = 0; i < lowerWord.length(); i++) {
-        //char  checkChar = lowerWord.charAt(i);
         String z = String.valueOf(lowerWord.charAt(i));
-        // z = Взятая буква из слова
         for (var j = 0; j < listSet.size(); j++) {
             if (!listSet.contains(z)) {
                 return false;
