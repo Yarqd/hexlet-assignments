@@ -6,10 +6,13 @@ import java.util.Map;
 // BEGIN
 class App {
     public static Map getWordCount(String sentence) {
-        String[] x = sentence.split(" "); // Создал массив со словами
-        Map<String, Integer> map = new HashMap<>(); //Создал результирующую map
+        String[] x = sentence.split(" ");
+        Map<String, Integer> map = new HashMap<>();
+        if (sentence == "") {
+            return map;
+        }
         for (var i = 0; i < x.length; i++){
-            if (map.containsKey(x[i])) { //Если в мапе есть ключ (слово) то
+            if (map.containsKey(x[i])) {
                 int newKey = map.get(x[i]) + 1;
                 map.put(x[i], newKey);
             } else {
@@ -20,6 +23,9 @@ class App {
     }
 
     public static String toString(Map<String, Integer> map) {
+        if (map.isEmpty()) {
+            return "{}";
+        }
         var result = new StringBuilder();
         result.append("{");
         result.append("\n");
