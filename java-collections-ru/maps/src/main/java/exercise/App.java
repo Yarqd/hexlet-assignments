@@ -18,6 +18,7 @@ class App {
         }
         return map;
     }
+
     public static String toString(Map<String, Integer> map) {
         var result = new StringBuilder();
         result.append("{");
@@ -32,6 +33,5 @@ class App {
         result.append("}");
         return result.toString();
     }
-}
 }
 //END
