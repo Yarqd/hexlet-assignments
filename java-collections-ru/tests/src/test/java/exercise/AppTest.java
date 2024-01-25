@@ -13,7 +13,7 @@ class AppTest {
         // BEGIN
             List<Integer> list = new ArrayList<>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             List<Integer> result = App.take(list, 5);
-            assertTrue(result.isEmpty(1, 2, 3, 4, 5));
+            assertTrue(result.contains(1, 2, 3, 4, 5));
         }
         // END
     }
