@@ -5,24 +5,13 @@ import java.util.Arrays;
 
 // BEGIN
 public class App {
-    public static int getCountOfFreeEmails(List<String> emails) {
-        int count = 0;
-        for (String email : emails) {
-            if (isFreeDomain(email)) {
-                count++;
-            }
-        }
-
+    public static long getCountOfFreeEmails(List<String> emails) {
+        String em1 = "gmail.com";
+        String em2 = "yandex.ru";
+        String em3 = "hotmail.com";
+        long count = emails.stream()
+                .filter(s -> s.contains(em1) && s.contains(em2) && s.contains(em3))
+                .count();
         return count;
     }
-
-    private static boolean isFreeDomain(String email) {
-        String[] parts = email.split("@");
-        if (parts.length == 2) {
-            String domain = parts[1];
-            return domain.equals("gmail.com") || domain.equals("yandex.ru") || domain.equals("hotmail.com");
-        }
-        return false;
-    }
-}
 // END
