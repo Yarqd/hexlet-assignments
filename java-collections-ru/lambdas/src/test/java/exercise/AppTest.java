@@ -23,7 +23,7 @@ class AppTest {
                 {"*", "*", "*", "*", "*", "*", "*", "*"},
                 {"*", "*", "*", "*", "*", "*", "*", "*"}
         };
-        String[][] actualEnlargedImage = ImageProcessor.nlargeArrayImage(originalImage);
+        String[][] actualEnlargedImage = App.enlargeArrayImage(originalImage);
         assertThat(actualEnlargedImage).isEqualTo(expectedEnlargedImage);
     }
 }
