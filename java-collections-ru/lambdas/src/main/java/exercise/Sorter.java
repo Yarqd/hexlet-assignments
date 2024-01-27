@@ -16,4 +16,5 @@ public class Sorter {
                 .forEach(user -> oldestMans.add(user.get("name")));
         return oldestMans;
     }
+}
 // END
