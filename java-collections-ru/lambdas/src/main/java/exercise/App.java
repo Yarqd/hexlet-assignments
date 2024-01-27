@@ -3,6 +3,7 @@ package exercise;
 import java.util.Arrays;
 
 // BEGIN
+public class App{
 public static String[][] enlargeArrayImage(String[][] arr) {
     int rows = arr.length;
     int columns = arr[0].length;
