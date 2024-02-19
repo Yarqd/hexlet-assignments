@@ -9,21 +9,20 @@ import java.util.TreeSet;
 // BEGIN
 public class App {
     public static Map<String, String> genDiff(Map<String, Object> data1, Map<String, Object> data2) {
+        Set<String> keys = new TreeSet<>(data1.keySet()); // Создаем TreeSet для автоматической сортировки ключей
+        keys.addAll(data2.keySet()); // Добавляем все ключи из обоих множеств
+
         Map<String, String> result = new LinkedHashMap<>(); // Результирующий словарь
-        // Получаем объединение ключей из обоих словарей
-        for (String key : data1.keySet()) {
-            if (data2.containsKey(key)) {
+        for (String key : keys) {
+            if (data1.containsKey(key) && data2.containsKey(key)) {
                 if (data1.get(key).equals(data2.get(key))) {
                     result.put(key, "unchanged");
                 } else {
                     result.put(key, "changed");
                 }
-            } else {
+            } else if (data1.containsKey(key)) {
                 result.put(key, "deleted");
-            }
-        }
-        for (String key : data2.keySet()) {
-            if (!data1.containsKey(key)) {
+            } else {
                 result.put(key, "added");
             }
         }
