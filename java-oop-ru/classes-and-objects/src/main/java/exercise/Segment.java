@@ -22,10 +22,10 @@ public class Segment {
         return (a + b) / 2;
     }
 
-    public int getMidPoint() {
+    public Point getMidPoint() {
         int a = getBeginPoint();
         int b = getEndPoint();
-        return (a + b) / 2;
+        return new Point(a, b);
     }
 }
 // END
