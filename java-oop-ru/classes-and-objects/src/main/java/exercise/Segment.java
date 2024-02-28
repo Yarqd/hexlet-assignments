@@ -10,21 +10,17 @@ public class Segment {
         this.two = two;
     }
 
-    public int getBeginPoint() {
-        int a = one.getX();
-        int b = two.getX();
-        return (a + b) / 2;
+    public Point getBeginPoint() {
+        return one;
     }
 
-    public int getEndPoint() {
-        int a = one.getY();
-        int b = two.getY();
-        return (a + b) / 2;
+    public Point getEndPoint() {
+        return two;
     }
 
     public Point getMidPoint() {
-        int a = getBeginPoint();
-        int b = getEndPoint();
+        int a = getBeginPoint().getX() + getEndPoint().getY() / 2;
+        int b = getBeginPoint().getY() + getEndPoint().getY() / 2;
         return new Point(a, b);
     }
 }
