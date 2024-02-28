@@ -2,8 +2,8 @@ package exercise;
 
 // BEGIN
 public class Segment {
-    private Point one;
-    private Point two;
+    private final Point one;
+    private final Point two;
 
     public Segment(Point one, Point two) {
         this.one = one;
