@@ -5,7 +5,7 @@ public class Flat implements Home {
 
     private final double area;
     private final double balconyArea;
-    private final int floor
+    private final int floor;
 
     public Flat (double area, double balconyArea, int floor){
         this.area = area;
