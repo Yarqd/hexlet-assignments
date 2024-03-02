@@ -11,11 +11,12 @@ import java.util.HashMap;
 
 public class FileKV implements KeyValueStorage {
     private Map<String, String> data = new HashMap<>();
-    private final Path path;
+    private final Path filepath;
+    private final Map<String, String> data;
 
-    public FileKV(Path path) {
-        this.path = path;
-        // Инициализируйте data по вашему усмотрению, например, загрузив данные из файла
+    public FileKV(Path filepath) {
+        this.filepath = filepath;
+        this.data = new HashMap<>();
     }
 
     @Override
