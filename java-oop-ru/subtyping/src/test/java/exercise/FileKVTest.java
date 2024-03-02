@@ -1,47 +1,40 @@
 package exercise;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.HashMap;
 import java.util.Map;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-// BEGIN
-
-// END
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class FileKVTest {
 
     private static Path filepath = Paths.get("src/test/resources/file").toAbsolutePath().normalize();
 
     @BeforeEach
-    public void beforeEach() throws IOException {
-        Files.deleteIfExists(filepath); // Удаляем файл перед каждым запуском теста
+    public void setUp() throws Exception {
+        Files.createDirectories(filepath.getParent());
+        Files.createFile(filepath);
     }
 
-    // BEGIN
     @Test
-    public void testFileKV() throws IOException {
-        // Arrange
-        Map<String, String> testData = new HashMap<>();
-        testData.put("key1", "value1");
-        testData.put("key2", "value2");
+    public void testFileKV() throws Exception {
+        Map<String, String> initialData = Map.of("key1", "value1", "key2", "value2");
+        KeyValueStorage storage = new FileKV(filepath.toString(), initialData);
 
-        // Act
-        String serializedData = Utils.serialize(testData);
-        Utils.writeFile(filepath.toString(), serializedData);
+        assertEquals("value1", storage.get("key1", "default"));
+        assertEquals("value2", storage.get("key2", "default"));
+        assertEquals("default", storage.get("unknown", "default"));
 
-        String fileContent = Utils.readFile(filepath.toString());
-        Map<String, String> deserializedData = Utils.unserialize(fileContent);
+        // Удаление ключа
+        storage.unset("key2");
+        assertEquals("default", storage.get("key2", "default"));
 
-        // Assert
-        assertEquals(testData, deserializedData);
+        // Получение всех данных из базы
+        Map<String, String> data = storage.toMap();
+        assertEquals(initialData, data);
     }
-    // END
 }
