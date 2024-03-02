@@ -1,7 +1,7 @@
 package exercise;
 
 // BEGIN
-public class ReversedSequence implements CharSequence{
+public class ReversedSequence implements CharSequence {
     private final String original;
 
     public ReversedSequence(String str) {
