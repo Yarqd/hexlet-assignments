@@ -23,7 +23,7 @@ class FileKVTest {
     @Test
     public void testFileKV() throws Exception {
         Map<String, String> initialData = Map.of("key1", "value1", "key2", "value2");
-        Path path = Paths.get(filepath);
+        Path path = Paths.get(filepath.toString());
         KeyValueStorage storage = new FileKV(path);
 
 
