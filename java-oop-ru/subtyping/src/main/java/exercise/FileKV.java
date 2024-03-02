@@ -17,8 +17,8 @@ public class FileKV implements KeyValueStorage {
 
     @Override
     public void set(String key, String value) {
-        data.put(key, value);
-        saveToFile();
+        data.put(key, value); // Обновляем данные в памяти
+        saveToFile(); // Сохраняем данные в файл
     }
 
     @Override
@@ -39,12 +39,11 @@ public class FileKV implements KeyValueStorage {
 
     private void saveToFile() {
         try {
-            String content = Utils.serialize(data);
-            Files.writeString(filePath, content);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(Paths.get(filePath).toFile(), data); // Записываем данные в файл
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to save data to file: " + e.getMessage());
         }
-    }
 
     private void loadFromFile() {
         try {
