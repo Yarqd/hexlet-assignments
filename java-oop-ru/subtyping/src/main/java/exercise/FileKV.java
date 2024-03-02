@@ -1,42 +1,39 @@
 package exercise;
 
 // BEGIN
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class FileKV implements KeyValueStorage {
-    private String filePath;
+    private final Map<String, String> data;
+    private final Path path;
 
-    public FileKV(String filePath, Map<String, String> initialData) {
-        this.filePath = filePath;
-        String content = Utils.serialize(initialData);
-        Utils.writeFile(filePath, content);
+    public FileKV(Path path) {
+        this.path = path;
+        // Инициализируйте data по вашему усмотрению, например, загрузив данные из файла
     }
 
     @Override
     public void set(String key, String value) {
-        Map<String, String> data = Utils.unserialize(Utils.readFile(filePath));
         data.put(key, value);
-        String content = Utils.serialize(data);
-        Utils.writeFile(filePath, content);
     }
 
     @Override
     public void unset(String key) {
-        Map<String, String> data = Utils.unserialize(Utils.readFile(filePath));
         data.remove(key);
-        String content = Utils.serialize(data);
-        Utils.writeFile(filePath, content);
     }
 
     @Override
     public String get(String key, String defaultValue) {
-        Map<String, String> data = Utils.unserialize(Utils.readFile(filePath));
         return data.getOrDefault(key, defaultValue);
     }
 
     @Override
     public Map<String, String> toMap() {
-        return Utils.unserialize(Utils.readFile(filePath));
+        return data;
     }
 
     @Override
@@ -48,6 +45,6 @@ public class FileKV implements KeyValueStorage {
             }
         }
     }
-
 }
+
 // END
