@@ -1,10 +1,12 @@
 package exercise;
 
 // BEGIN
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
+import java.util.HashMap;
 
 public class FileKV implements KeyValueStorage {
     private final Path filepath;
@@ -36,12 +38,13 @@ public class FileKV implements KeyValueStorage {
     }
 
     @Override
-    public void save() throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(filepath)) {
+    public void save() {
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(filepath))) {
             for (Map.Entry<String, String> entry : dataMap.entrySet()) {
-                writer.write(entry.getKey() + "=" + entry.getValue());
-                writer.newLine();
+                writer.println(entry.getKey() + "=" + entry.getValue());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

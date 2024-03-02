@@ -11,7 +11,7 @@ public class App {
         for (Map.Entry<String, String> entry : data.entrySet()) {
             newData.put(entry.getValue(), entry.getKey());
         }
-        storage.clear(); // Очищаем хранилище перед заменой
+        storage.unset(); // Очищаем хранилище перед заменой
         for (Map.Entry<String, String> entry : newData.entrySet()) {
             storage.set(entry.getKey(), entry.getValue());
         }
