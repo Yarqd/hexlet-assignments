@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.IOException;
 
 public class FileKV implements KeyValueStorage {
     private final Path filePath;
