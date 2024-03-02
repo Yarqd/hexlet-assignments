@@ -6,9 +6,7 @@ import java.util.Map;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class FileKVTest {
 
@@ -16,9 +14,11 @@ class FileKVTest {
 
     @BeforeEach
     public void setUp() throws Exception {
+        Files.deleteIfExists(filepath); // Перед созданием удаляем файл, если он уже существует
         Files.createDirectories(filepath.getParent());
         Files.createFile(filepath);
     }
+
 
     @Test
     public void testFileKV() throws Exception {
