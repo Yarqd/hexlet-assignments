@@ -27,12 +27,12 @@ class FileKVTest {
     }
 
     // BEGIN
-    private static final Path TEST_FILE_PATH = "src/test/resources/testdata.txt";
+    private static final Path TEST_FILE_PATH = Paths.get("src/test/resources/testdata.txt");
 
     @BeforeEach
     void setUp() throws IOException {
-            // Удаляем файл перед каждым тестом
-        Files.deleteIfExists(Path.of(TEST_FILE_PATH));
+        // Удаляем файл перед каждым тестом
+        Files.deleteIfExists(TEST_FILE_PATH);
     }
 
     @Test
@@ -47,7 +47,7 @@ class FileKVTest {
         // Изменяем значения и убеждаемся, что они сохраняются в файле
         storage.set("key1", "newValue1");
         storage.set("key3", "value3");
-         // Создаем новый объект FileKV и проверяем, что изменения сохранились
+        // Создаем новый объект FileKV и проверяем, что изменения сохранились
         FileKV newStorage = new FileKV(TEST_FILE_PATH, Map.of());
         assertEquals("newValue1", newStorage.get("key1", ""));
         assertEquals("value2", newStorage.get("key2", ""));
