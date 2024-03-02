@@ -38,5 +38,16 @@ public class FileKV implements KeyValueStorage {
     public Map<String, String> toMap() {
         return Utils.unserialize(Utils.readFile(filePath));
     }
+
+    @Override
+    public void save() throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                writer.write(entry.getKey() + "=" + entry.getValue());
+                writer.newLine();
+            }
+        }
+    }
+
 }
 // END
