@@ -80,6 +80,5 @@ class AppTest {
         CharSequence reversed = new ReversedSequence("abcdef");
         assertEquals("edc", reversed.subSequence(1, 4).toString());
     }
-}
     // END
 }
