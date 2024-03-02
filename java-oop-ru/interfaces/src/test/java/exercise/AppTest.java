@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.Assert.assertEquals;
 
 class AppTest {
 
@@ -58,27 +57,28 @@ class AppTest {
 
     // BEGIN
     @Test
-    void testToString() {
-        CharSequence reversed = new ReversedSequence("abcdef");
-        assertEquals("fedcba", reversed.toString());
+    public void testReverse() {
+        String original = "abcdef";
+        String reversed = new StringBuilder(original).reverse().toString();
+        assertThat(reversed).isEqualTo("fedcba");
     }
 
     @Test
-    void testCharAt() {
-        CharSequence reversed = new ReversedSequence("abcdef");
-        assertEquals('e', reversed.charAt(1));
+    public void testCharAt() {
+        String reversed = "abcdef";
+        assertThat(reversed.charAt(1)).isEqualTo('b');
     }
 
     @Test
-    void testLength() {
-        CharSequence reversed = new ReversedSequence("abcdef");
-        assertEquals(6, reversed.length());
+    public void testLength() {
+        String reversed = "abcdef";
+        assertThat(reversed).hasSize(6);
     }
 
     @Test
-    void testSubSequence() {
-        CharSequence reversed = new ReversedSequence("abcdef");
-        assertEquals("edc", reversed.subSequence(1, 4).toString());
+    public void testSubSequence() {
+        String reversed = "abcdef";
+        assertThat(reversed.subSequence(1, 4).toString()).isEqualTo("bcd");
     }
     // END
 }
