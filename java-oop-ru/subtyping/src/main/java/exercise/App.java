@@ -14,7 +14,6 @@ public class App {
         for (Entry<String, String> entry : data.entrySet()) {
             newData.put(entry.getValue(), entry.getKey());
         }
-        storage;
         for (Entry<String, String> entry : newData.entrySet()) {
             storage.set(entry.getKey(), entry.getValue());
         }
