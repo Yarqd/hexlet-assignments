@@ -3,44 +3,50 @@ package exercise;
 // BEGIN
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
+import java.nio.file.Paths;
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-
-public class FileKV {
+public class FileKV implements KeyValueStorage {
     private final Path filePath;
+    private Map<String, String> data;
 
-    public FileKV(Path filePath) {
-        this.filePath = filePath;
+    public FileKV(String filePath, Map<String, String> initialData) {
+        this.filePath = Paths.get(filePath);
+        this.data = initialData;
+        // При создании экземпляра класса сразу сохраняем данные в файл
+        saveToFile();
     }
 
-    public void set(String key, String value) throws IOException {
-        Map<String, String> data = Files.lines(filePath)
-                .map(line -> line.split("="))
-                .collect(Collectors.toMap(parts -> parts[0], parts -> parts[1]));
-        data.put(key, value);
-        Files.write(filePath, () -> data.entrySet().stream()
-                .<CharSequence>map(entry -> entry.getKey() + "=" + entry.getValue())
-                .iterator());
-    }
-
-    public String get(String key, String defaultValue) throws IOException {
-        Map<String, String> data = Files.lines(filePath)
-                .map(line -> line.split("="))
-                .collect(Collectors.toMap(parts -> parts[0], parts -> parts[1]));
+    @Override
+    public String get(String key, String defaultValue) {
         return data.getOrDefault(key, defaultValue);
     }
 
-    public void unset(String key) throws IOException {
-        Map<String, String> data = Files.lines(filePath)
-                .map(line -> line.split("="))
-                .collect(Collectors.toMap(parts -> parts[0], parts -> parts[1]));
+    @Override
+    public void set(String key, String value) {
+        data.put(key, value);
+        saveToFile();
+    }
+
+    @Override
+    public void unset(String key) {
         data.remove(key);
-        Files.write(filePath, () -> data.entrySet().stream()
-                .<CharSequence>map(entry -> entry.getKey() + "=" + entry.getValue())
-                .iterator());
+        saveToFile();
+    }
+
+    @Override
+    public Map<String, String> toMap() {
+        return data;
+    }
+
+    // Метод для сохранения данных в файл
+    private void saveToFile() {
+        try {
+            Utils.writeFile(filePath, Utils.serialize(data));
+        } catch (IOException e) {
+            System.err.println("Error saving data to file: " + e.getMessage());
+        }
     }
 }
-
 // END

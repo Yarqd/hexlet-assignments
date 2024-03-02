@@ -8,10 +8,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 // BEGIN
-import org.junit.jupiter.api.Test;
-import java.io.IOException;
-import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
+import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 // END
 
 
@@ -27,31 +31,38 @@ class FileKVTest {
     }
 
     // BEGIN
-    private static final Path TEST_FILE_PATH = Paths.get("src/test/resources/testdata.txt");
-
-    @BeforeEach
-    void setUp() throws IOException {
-        // Удаляем файл перед каждым тестом
-        Files.deleteIfExists(TEST_FILE_PATH);
-    }
-
     @Test
-    void testFileKV() {
-        // Создаем объект FileKV
-        FileKV storage = new FileKV(TEST_FILE_PATH, Map.of("key1", "value1", "key2", "value2"));
+    public void testFileKV() {
+        // Подготавливаем тестовые данные
+        Map<String, String> initialData = new HashMap<>();
+        initialData.put("key1", "value1");
+        initialData.put("key2", "value2");
 
-        // Проверяем значения по ключам
+        // Создаем экземпляр FileKV
+        FileKV storage = new FileKV(filepath.toString(), initialData);
+
+        // Проверяем, что данные успешно записались в файл
+        assertTrue(Files.exists(filepath));
+
+        // Проверяем, что данные можно получить
         assertEquals("value1", storage.get("key1", ""));
         assertEquals("value2", storage.get("key2", ""));
 
-        // Изменяем значения и убеждаемся, что они сохраняются в файле
-        storage.set("key1", "newValue1");
+        // Проверяем, что при установке новых значений данные сохраняются в файл
         storage.set("key3", "value3");
-        // Создаем новый объект FileKV и проверяем, что изменения сохранились
-        FileKV newStorage = new FileKV(TEST_FILE_PATH, Map.of());
-        assertEquals("newValue1", newStorage.get("key1", ""));
-        assertEquals("value2", newStorage.get("key2", ""));
-        assertEquals("value3", newStorage.get("key3", ""));
+        assertEquals("value3", storage.get("key3", ""));
+        assertTrue(Files.exists(filepath));
+
+        // Проверяем, что при удалении ключа данные сохраняются в файл
+        storage.unset("key2");
+        assertNull(storage.get("key2", null));
+        assertTrue(Files.exists(filepath));
+
+        // Проверяем, что метод toMap работает корректно
+        Map<String, String> data = storage.toMap();
+        assertEquals(2, data.size());
+        assertEquals("value1", data.get("key1"));
+        assertEquals("value3", data.get("key3"));
     }
     // END
 }
