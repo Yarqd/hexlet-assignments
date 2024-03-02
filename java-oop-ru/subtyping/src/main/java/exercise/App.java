@@ -9,7 +9,7 @@ public class App {
     public static void swapKeyValue(KeyValueStorage storage) {
         Map<String, String> originalData = storage.toMap();
         storage.toMap().forEach((key, value) -> storage.set(value, key));
-        originalData.forEach(storage::unset);
+        originalData.keySet().forEach(storage::unset);
     }
 }
 // END
