@@ -23,7 +23,9 @@ class FileKVTest {
     @Test
     public void testFileKV() throws Exception {
         Map<String, String> initialData = Map.of("key1", "value1", "key2", "value2");
-        KeyValueStorage storage = new FileKV(filepath.toString(), initialData);
+        Path path = Paths.get(filepath);
+        KeyValueStorage storage = new FileKV(path);
+
 
         assertEquals("value1", storage.get("key1", "default"));
         assertEquals("value2", storage.get("key2", "default"));
