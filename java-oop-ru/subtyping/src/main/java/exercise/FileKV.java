@@ -3,18 +3,29 @@ package exercise;
 // BEGIN
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.Map;
 
 public class FileKV implements KeyValueStorage {
-    private final Path filepath;
+    private final Path filePath;
     private final Map<String, String> dataMap;
 
-    public FileKV(Path filepath) {
-        this.filepath = filepath;
-        this.dataMap = new HashMap<>();
+    public FileKV(String fileName, Map<String, String> initialData) {
+        this.filePath = Path.of(fileName);
+        this.dataMap = initialData;
+    }
+
+    @Override
+    public void set(String key, String value) {
+        dataMap.put(key, value);
+        saveToFile();
+    }
+
+    @Override
+    public void unset(String key) {
+        dataMap.remove(key);
+        saveToFile();
     }
 
     @Override
@@ -23,35 +34,20 @@ public class FileKV implements KeyValueStorage {
     }
 
     @Override
-    public void set(String key, String value) {
-        dataMap.put(key, value);
-    }
-
-    @Override
-    public void unset(String key) {
-        dataMap.remove(key);
-    }
-
-    @Override
     public Map<String, String> toMap() {
         return new HashMap<>(dataMap);
     }
 
-    @Override
-    public void save() {
-        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(filepath))) {
+    private void saveToFile() {
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
             for (Map.Entry<String, String> entry : dataMap.entrySet()) {
-                writer.println(entry.getKey() + "=" + entry.getValue());
+                writer.write(entry.getKey() + "=" + entry.getValue());
+                writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
+            // Handle exception appropriately
         }
     }
-
-    @Override
-    public void clear() {
-        dataMap.clear();
-    }
 }
-
 // END

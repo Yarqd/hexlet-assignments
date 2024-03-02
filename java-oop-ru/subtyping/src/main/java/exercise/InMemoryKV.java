@@ -5,38 +5,30 @@ import java.util.HashMap;
 
 // BEGIN
 public class InMemoryKV implements KeyValueStorage {
-
-    private Map<String, String> data;
+    private final Map<String, String> dataMap;
 
     public InMemoryKV(Map<String, String> initialData) {
-        this.data = new HashMap<>(initialData);
+        this.dataMap = initialData;
     }
 
     @Override
     public void set(String key, String value) {
-        data.put(key, value);
+        dataMap.put(key, value);
     }
-
-    @Override
-    public void save() {
-        // Реализация сохранения данных в память
-    }
-
 
     @Override
     public void unset(String key) {
-        data.remove(key);
+        dataMap.remove(key);
     }
 
     @Override
     public String get(String key, String defaultValue) {
-        return data.getOrDefault(key, defaultValue);
+        return dataMap.getOrDefault(key, defaultValue);
     }
 
     @Override
     public Map<String, String> toMap() {
-        return new HashMap<>(data);
+        return new HashMap<>(dataMap);
     }
 }
-
 // END

@@ -1,42 +1,53 @@
 package exercise;
 
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.util.Map;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.nio.file.StandardOpenOption;
+import com.fasterxml.jackson.databind.ObjectMapper;
+// BEGIN
+@Test
+void testSetAndGet() {
+    KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
+    storage.set("key", "value");
+    assertEquals("value", storage.get("key", ""));
+}
+
+@Test
+void testUnset() {
+    KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
+    storage.set("key", "value");
+    storage.unset("key");
+    assertEquals("", storage.get("key", ""));
+}
+// END
+
 
 class FileKVTest {
 
     private static Path filepath = Paths.get("src/test/resources/file").toAbsolutePath().normalize();
 
     @BeforeEach
-    public void setUp() throws Exception {
-        Files.deleteIfExists(filepath); // Перед созданием удаляем файл, если он уже существует
-        Files.createDirectories(filepath.getParent());
-        Files.createFile(filepath);
+    public void beforeEach() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String content = mapper.writeValueAsString(new HashMap<String, String>());
+        Files.writeString(filepath, content, StandardOpenOption.CREATE);
     }
 
-
+    // BEGIN
+    // BEGIN
     @Test
-    public void testFileKV() throws Exception {
-        Map<String, String> initialData = Map.of("key1", "value1", "key2", "value2");
-        Path path = Paths.get(filepath.toString());
-        KeyValueStorage storage = new FileKV(path);
+    void testSaveAndLoadFromFile() {
+        KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
+        storage.set("key", "value");
 
-
-        assertEquals("value1", storage.get("key1", "default"));
-        assertEquals("value2", storage.get("key2", "default"));
-        assertEquals("default", storage.get("unknown", "default"));
-
-        // Удаление ключа
-        storage.unset("key2");
-        assertEquals("default", storage.get("key2", "default"));
-
-        // Получение всех данных из базы
-        Map<String, String> data = storage.toMap();
-        assertEquals(initialData, data);
+        // Создаем новый объект FileKV, который загружает данные из файла
+        KeyValueStorage newStorage = new FileKV(filepath.toString());
+        assertEquals("value", newStorage.get("key", ""));
     }
+    // END
+
+    // END
 }

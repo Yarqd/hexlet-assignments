@@ -1,6 +1,5 @@
 package exercise;
 
-import java.io.IOException;
 import java.util.Map;
 
 interface KeyValueStorage {
@@ -8,5 +7,4 @@ interface KeyValueStorage {
     void unset(String key);
     String get(String key, String defaultValue);
     Map<String, String> toMap();
-    void save() throws IOException;
 }
