@@ -43,7 +43,7 @@ public class FileKV implements KeyValueStorage {
     // Метод для сохранения данных в файл
     private void saveToFile() {
         try {
-            Utils.writeFile(filePath, Utils.serialize(data));
+            Utils.writeFile(filePath.toString(), Utils.serialize(data));
         } catch (IOException e) {
             System.err.println("Error saving data to file: " + e.getMessage());
         }
