@@ -18,6 +18,12 @@ public class InMemoryKV implements KeyValueStorage {
     }
 
     @Override
+    public void save() {
+        // Реализация сохранения данных в память
+    }
+
+
+    @Override
     public void unset(String key) {
         data.remove(key);
     }

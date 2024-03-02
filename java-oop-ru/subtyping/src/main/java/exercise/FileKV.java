@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.HashMap;
+
 
 public class FileKV implements KeyValueStorage {
-    private final Map<String, String> data;
+    private Map<String, String> data = new HashMap<>();
     private final Path path;
 
     public FileKV(Path path) {
