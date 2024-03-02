@@ -3,6 +3,8 @@ package exercise;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.HashMap;
+
 
 // BEGIN
 public class App {
@@ -12,7 +14,7 @@ public class App {
         for (Entry<String, String> entry : data.entrySet()) {
             newData.put(entry.getValue(), entry.getKey());
         }
-        storage.unsetAll();
+        storage;
         for (Entry<String, String> entry : newData.entrySet()) {
             storage.set(entry.getKey(), entry.getValue());
         }
