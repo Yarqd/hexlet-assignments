@@ -44,14 +44,14 @@ public class FileKV implements KeyValueStorage {
         } catch (IOException e) {
             System.err.println("Failed to save data to file: " + e.getMessage());
         }
+    }
 
-        private void loadFromFile () {
-            try {
-                String content = Files.readString(filePath);
-                data = Utils.unserialize(content);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void loadFromFile () {
+        try {
+            String content = Files.readString(filePath);
+            data = Utils.unserialize(content);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
