@@ -37,7 +37,6 @@ class FileKVTest {
     }
 
     // BEGIN
-    // BEGIN
     @Test
     void testSaveAndLoadFromFile() {
         KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
@@ -47,7 +46,5 @@ class FileKVTest {
         KeyValueStorage newStorage = new FileKV(filepath.toString());
         assertEquals("value", newStorage.get("key", ""));
     }
-    // END
-
     // END
 }
