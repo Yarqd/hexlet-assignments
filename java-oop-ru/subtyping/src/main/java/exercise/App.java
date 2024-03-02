@@ -9,4 +9,5 @@ public class App {
         originalData.forEach((key, value) -> storage.set(value, key));
         originalData.keySet().forEach(storage::unset);
     }
+}
 // END
