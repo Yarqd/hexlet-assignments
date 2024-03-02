@@ -27,7 +27,7 @@ class FileKVTest {
     }
 
     // BEGIN
-    private static final String TEST_FILE_PATH = "src/test/resources/testdata.txt";
+    private static final Path TEST_FILE_PATH = "src/test/resources/testdata.txt";
 
     @BeforeEach
     void setUp() throws IOException {
