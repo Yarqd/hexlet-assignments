@@ -8,22 +8,11 @@ import java.util.Map;
 
 public class FileKV implements KeyValueStorage {
     private final Path filePath;
-    private final Map<String, String> data;
+    private Map<String, String> data;
 
-    public FileKV(String filePath, Map<String, String> initialData) {
-        this.filePath = Path.of(filePath);
-        this.data = new HashMap<>(initialData);
-        saveToFile();
-    }
-
-    private void saveToFile() {
-        Utils.writeFile(filePath, Utils.serialize(data));
-    }
-
-    private void loadFromFile() {
-        String content = Utils.readFile(filePath);
-        this.data.clear();
-        this.data.putAll(Utils.unserialize(content));
+    public FileKV(Path filePath, Map<String, String> initialData) {
+        this.filePath = filePath;
+        this.data = initialData;
     }
 
     @Override
@@ -40,14 +29,31 @@ public class FileKV implements KeyValueStorage {
 
     @Override
     public String get(String key, String defaultValue) {
-        loadFromFile();
         return data.getOrDefault(key, defaultValue);
     }
 
     @Override
     public Map<String, String> toMap() {
-        loadFromFile();
-        return new HashMap<>(data);
+        return data;
+    }
+
+    private void saveToFile() {
+        try {
+            String content = Utils.serialize(data);
+            Files.writeString(filePath, content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadFromFile() {
+        try {
+            String content = Files.readString(filePath);
+            data = Utils.unserialize(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
+
 // END
