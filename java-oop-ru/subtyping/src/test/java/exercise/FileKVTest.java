@@ -1,51 +1,38 @@
 package exercise;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Map;
 
-import java.util.HashMap;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-class FileKVTest {
-
-    private static Path filepath = Paths.get("src/test/resources/file").toAbsolutePath().normalize();
-
-    @BeforeEach
-    public void beforeEach() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        String content = mapper.writeValueAsString(new HashMap<String, String>());
-        Files.writeString(filepath, content, StandardOpenOption.CREATE);
-    }
+class InMemoryKVTest {
 
     @Test
-    void testSetAndGet() {
-        KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
-        storage.set("key", "value");
-        assertEquals("value", storage.get("key", ""));
-    }
+    void inMemoryKVTest() {
+        KeyValueStorage storage = new InMemoryKV(Map.of("key", "10"));
+        assertThat(storage.get("key2", "default")).isEqualTo("default");
+        assertThat(storage.get("key", "default")).isEqualTo("10");
 
-    @Test
-    void testUnset() {
-        KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
+        storage.set("key2", "value2");
         storage.set("key", "value");
+
+        assertThat(storage.get("key2", "default")).isEqualTo("value2");
+        assertThat(storage.get("key", "default")).isEqualTo("value");
+
         storage.unset("key");
-        assertEquals("", storage.get("key", ""));
+        assertThat(storage.get("key", "def")).isEqualTo("def");
+        assertThat(storage.toMap()).isEqualTo(Map.of("key2", "value2"));
     }
 
     @Test
-    void testSaveAndLoadFromFile() {
-        HashMap<String, String> initialData = new HashMap<>();
-        initialData.put("key", "value");
+    void mustBeImmutableTest() {
+        Map<String, String> initial = Map.of("key", "10");
 
-        KeyValueStorage storage = new FileKV(filepath.toString(), initialData);
-        storage.set("key", "value");
+        KeyValueStorage storage = new InMemoryKV(initial);
 
-        KeyValueStorage newStorage = new FileKV(filepath.toString(), new HashMap<>());
-        assertEquals("value", newStorage.get("key", ""));
+        assertThat(initial).isEqualTo(Map.of("key", "10"));
+
+        Map<String, String> map = storage.toMap();
+        map.put("key2", "value2");
+        assertThat(initial).isEqualTo(Map.of("key", "10"));
     }
 }

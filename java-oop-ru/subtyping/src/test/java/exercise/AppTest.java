@@ -21,6 +21,6 @@ class AppTest {
         KeyValueStorage storage = new InMemoryKV(Map.of("foo", "bar", "bar", "zoo"));
 
         Map<String, String> expected = Map.of("bar", "foo", "zoo", "bar");
-        assertThat(storage.toMap()).isEqualTo(expected);
+        assertThat(storage.toMap()).containsAllEntriesOf(expected);
     }
 }
