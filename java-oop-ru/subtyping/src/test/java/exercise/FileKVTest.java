@@ -39,14 +39,12 @@ class FileKVTest {
 
     @Test
     void testSaveAndLoadFromFile() {
-        // Исправленный код для передачи начального значения Map
         HashMap<String, String> initialData = new HashMap<>();
         initialData.put("key", "value");
 
         KeyValueStorage storage = new FileKV(filepath.toString(), initialData);
         storage.set("key", "value");
 
-        // Создаем новый объект FileKV, который загружает данные из файла
         KeyValueStorage newStorage = new FileKV(filepath.toString(), new HashMap<>());
         assertEquals("value", newStorage.get("key", ""));
     }

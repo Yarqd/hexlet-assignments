@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Map;
 import java.util.HashMap;
 
-
 class InMemoryKVTest {
 
     @Test
@@ -23,7 +22,6 @@ class InMemoryKVTest {
         storage.unset("key");
         assertThat(storage.get("key", "def")).isEqualTo("def");
         assertThat(storage.toMap()).isEqualTo(Map.of("key2", "value2"));
-
     }
 
     @Test
@@ -31,8 +29,7 @@ class InMemoryKVTest {
         Map<String, String> initial = new HashMap<>();
         initial.put("key", "10");
 
-        Map<String, String> clonedInitial = new HashMap<>();
-        clonedInitial.putAll(initial);
+        Map<String, String> clonedInitial = new HashMap<>(initial);
 
         KeyValueStorage storage = new InMemoryKV(initial);
 
