@@ -31,6 +31,11 @@ public class InMemoryKV implements KeyValueStorage {
     }
 
     @Override
+    public void setAll(Map<String, String> map) {
+        dataMap.putAll(map);
+    }
+
+    @Override
     public Map<String, String> toMap() {
         return new HashMap<>(dataMap);
     }
