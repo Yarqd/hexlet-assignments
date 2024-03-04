@@ -43,6 +43,7 @@ public class FileKV implements KeyValueStorage {
         try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
             for (Map.Entry<String, String> entry : dataMap.entrySet()) {
                 writer.write(entry.getKey() + "=" + entry.getValue());
+                writer.newLine(); // Добавляем новую строку для разделения записей
                 writer.newLine();
             }
         } catch (IOException e) {

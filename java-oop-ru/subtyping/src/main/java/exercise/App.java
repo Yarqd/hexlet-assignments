@@ -1,3 +1,8 @@
+package exercise;
+
+import java.util.Map;
+import java.util.LinkedHashMap;
+
 public class App {
     public static void swapKeyValue(KeyValueStorage storage) {
         Map<String, String> map = storage.toMap();
@@ -8,6 +13,6 @@ public class App {
         }
 
         storage.clear();
-        storage.setAll(swappedMap);
+        swappedMap.forEach((key, value) -> storage.set(key, value));
     }
 }
