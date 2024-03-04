@@ -55,4 +55,9 @@ public class FileKV implements KeyValueStorage {
             // Handle exception appropriately
         }
     }
+
+    @Override
+    public void setAll(Map<String, String> map) {
+        // Реализация метода
+    }
 }
