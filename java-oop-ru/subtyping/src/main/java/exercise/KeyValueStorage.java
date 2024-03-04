@@ -2,9 +2,8 @@ package exercise;
 
 import java.util.Map;
 
-interface KeyValueStorage {
-    void set(String key, String value);
-    void unset(String key);
-    String get(String key, String defaultValue);
+public interface KeyValueStorage {
+    void clear();
+    void setAll(Map<String, String> map);
     Map<String, String> toMap();
 }
