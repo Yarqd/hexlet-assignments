@@ -22,6 +22,8 @@ class AppTest {
         KeyValueStorage storage = new InMemoryKV(Map.of("foo", "bar", "bar", "zoo"));
         App.swapKeyValue(storage);
         Map<String, String> expected = Map.of("bar", "foo", "zoo", "bar");
+        // Меняем местами ключи и значения, так как ожидается именно обмен
         assertThat(storage.toMap()).isEqualTo(expected);
     }
 }
+
