@@ -1,11 +1,11 @@
 package exercise;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 import java.util.HashMap;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 public class FileKV implements KeyValueStorage {
     private final Path filePath;
@@ -34,21 +34,14 @@ public class FileKV implements KeyValueStorage {
     }
 
     @Override
-    public Map<String, String> toMap() {
-        return new HashMap<>(dataMap);
-    }
-
-    @Override
-    public void setAll(Map<String, String> map) {
-        dataMap.clear();
-        dataMap.putAll(map);
-        saveToFile();
-    }
-
-    @Override
     public void clear() {
         dataMap.clear();
         saveToFile();
+    }
+
+    @Override
+    public Map<String, String> toMap() {
+        return new HashMap<>(dataMap);
     }
 
     private void saveToFile() {
