@@ -40,12 +40,6 @@ public class FileKV implements KeyValueStorage {
     }
 
     @Override
-    public void setAll(Map<String, String> map) {
-        dataMap.putAll(map);
-        saveToFile();
-    }
-
-    @Override
     public Map<String, String> toMap() {
         return new HashMap<>(dataMap);
     }
