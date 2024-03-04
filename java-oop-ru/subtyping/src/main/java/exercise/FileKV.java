@@ -1,6 +1,5 @@
 package exercise;
 
-// BEGIN
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,62 +15,45 @@ public class FileKV implements KeyValueStorage {
         this.filePath = Path.of(fileName);
         this.dataMap = initialData;
     }
-package exercise;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.HashMap;
+    @Override
+    public void set(String key, String value) {
+        dataMap.put(key, value);
+        saveToFile();
+    }
 
-    public class FileKV implements KeyValueStorage {
-        private final Path filePath;
-        private final Map<String, String> dataMap;
+    @Override
+    public void unset(String key) {
+        dataMap.remove(key);
+        saveToFile();
+    }
 
-        public FileKV(String fileName, Map<String, String> initialData) {
-            this.filePath = Path.of(fileName);
-            this.dataMap = initialData;
-        }
+    @Override
+    public String get(String key, String defaultValue) {
+        return dataMap.getOrDefault(key, defaultValue);
+    }
 
-        @Override
-        public void set(String key, String value) {
-            dataMap.put(key, value);
-            saveToFile();
-        }
+    @Override
+    public Map<String, String> toMap() {
+        return new HashMap<>(dataMap);
+    }
 
-        @Override
-        public void unset(String key) {
-            dataMap.remove(key);
-            saveToFile();
-        }
+    @Override
+    public void setAll(Map<String, String> map) {
+        dataMap.clear();
+        dataMap.putAll(map);
+        saveToFile();
+    }
 
-        @Override
-        public String get(String key, String defaultValue) {
-            return dataMap.getOrDefault(key, defaultValue);
-        }
-
-        @Override
-        public Map<String, String> toMap() {
-            return new HashMap<>(dataMap);
-        }
-
-        @Override
-        public void setAll(Map<String, String> map) {
-            dataMap.clear();
-            dataMap.putAll(map);
-            saveToFile();
-        }
-
-        private void saveToFile() {
-            try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-                for (Map.Entry<String, String> entry : dataMap.entrySet()) {
-                    writer.write(entry.getKey() + "=" + entry.getValue());
-                    writer.newLine();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Handle exception appropriately
+    private void saveToFile() {
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+            for (Map.Entry<String, String> entry : dataMap.entrySet()) {
+                writer.write(entry.getKey() + "=" + entry.getValue());
+                writer.newLine();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exception appropriately
         }
     }
+}
