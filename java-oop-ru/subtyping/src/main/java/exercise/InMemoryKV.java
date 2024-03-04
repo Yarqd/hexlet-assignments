@@ -3,7 +3,6 @@ package exercise;
 import java.util.Map;
 import java.util.HashMap;
 
-// BEGIN
 public class InMemoryKV implements KeyValueStorage {
     private final Map<String, String> dataMap;
 
@@ -30,5 +29,10 @@ public class InMemoryKV implements KeyValueStorage {
     public Map<String, String> toMap() {
         return new HashMap<>(dataMap);
     }
+
+    @Override
+    public void setAll(Map<String, String> map) {
+        dataMap.clear();
+        dataMap.putAll(map);
+    }
 }
-// END

@@ -12,7 +12,6 @@ public class App {
             swappedMap.put(entry.getValue(), entry.getKey());
         }
 
-        storage.clear();
-        swappedMap.forEach((key, value) -> storage.set(key, value));
+        storage.setAll(swappedMap);
     }
 }
