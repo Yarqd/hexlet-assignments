@@ -1,29 +1,15 @@
 package exercise;
 
-import java.util.HashMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import com.fasterxml.jackson.databind.ObjectMapper;
-// BEGIN
-@Test
-void testSetAndGet() {
-    KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
-    storage.set("key", "value");
-    assertEquals("value", storage.get("key", ""));
-}
-
-@Test
-void testUnset() {
-    KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
-    storage.set("key", "value");
-    storage.unset("key");
-    assertEquals("", storage.get("key", ""));
-}
-// END
-
 
 class FileKVTest {
 
@@ -36,7 +22,21 @@ class FileKVTest {
         Files.writeString(filepath, content, StandardOpenOption.CREATE);
     }
 
-    // BEGIN
+    @Test
+    void testSetAndGet() {
+        KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
+        storage.set("key", "value");
+        assertEquals("value", storage.get("key", ""));
+    }
+
+    @Test
+    void testUnset() {
+        KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
+        storage.set("key", "value");
+        storage.unset("key");
+        assertEquals("", storage.get("key", ""));
+    }
+
     @Test
     void testSaveAndLoadFromFile() {
         KeyValueStorage storage = new FileKV(filepath.toString(), new HashMap<>());
@@ -46,5 +46,4 @@ class FileKVTest {
         KeyValueStorage newStorage = new FileKV(filepath.toString());
         assertEquals("value", newStorage.get("key", ""));
     }
-    // END
 }
