@@ -3,9 +3,8 @@ package exercise;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Map;
-import java.util.HashMap;
 
-class InMemoryKVTest {
+class UpdatedInMemoryKVTest {
 
     @Test
     void inMemoryKVTest() {
@@ -30,10 +29,8 @@ class InMemoryKVTest {
 
         KeyValueStorage storage = new InMemoryKV(initial);
 
-        // Проверяем, что исходная карта остается неизменной
         assertThat(initial).isEqualTo(Map.of("key", "10"));
 
-        // Должно быть возможным получить копию карты и изменять ее без влияния на исходную карту
         Map<String, String> map = storage.toMap();
         map.put("key2", "value2");
         assertThat(initial).isEqualTo(Map.of("key", "10"));
