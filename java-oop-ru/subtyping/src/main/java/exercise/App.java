@@ -1,21 +1,13 @@
-import java.util.Map;
-import java.util.HashMap;
+public class App {
+    public static void swapKeyValue(KeyValueStorage storage) {
+        Map<String, String> map = storage.toMap();
+        Map<String, String> swappedMap = new LinkedHashMap<>();
 
-public class MyKeyValueStorage implements KeyValueStorage {
-    private Map<String, String> storage = new HashMap<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            swappedMap.put(entry.getValue(), entry.getKey());
+        }
 
-    @Override
-    public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public void setAll(Map<String, String> map) {
-        storage.putAll(map);
-    }
-
-    @Override
-    public Map<String, String> toMap() {
-        return new HashMap<>(storage);
+        storage.setAll(swappedMap);
     }
 }
