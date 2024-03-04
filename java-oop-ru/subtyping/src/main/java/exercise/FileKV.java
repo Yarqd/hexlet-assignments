@@ -45,6 +45,12 @@ public class FileKV implements KeyValueStorage {
         saveToFile();
     }
 
+    @Override
+    public void clear() {
+        dataMap.clear();
+        saveToFile();
+    }
+
     private void saveToFile() {
         try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
             for (Map.Entry<String, String> entry : dataMap.entrySet()) {
