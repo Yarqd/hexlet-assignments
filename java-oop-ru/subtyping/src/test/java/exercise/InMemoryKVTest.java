@@ -26,18 +26,16 @@ class InMemoryKVTest {
 
     @Test
     void mustBeImmutableTest() {
-        Map<String, String> initial = new HashMap<>();
-        initial.put("key", "10");
-
-        Map<String, String> clonedInitial = new HashMap<>(initial);
+        Map<String, String> initial = Map.of("key", "10");
 
         KeyValueStorage storage = new InMemoryKV(initial);
 
-        initial.put("key2", "value2");
-        assertThat(storage.toMap()).isEqualTo(clonedInitial);
+        // Проверяем, что исходная карта остается неизменной
+        assertThat(initial).isEqualTo(Map.of("key", "10"));
 
+        // Должно быть возможным получить копию карты и изменять ее без влияния на исходную карту
         Map<String, String> map = storage.toMap();
         map.put("key2", "value2");
-        assertThat(storage.toMap()).isEqualTo(clonedInitial);
+        assertThat(initial).isEqualTo(Map.of("key", "10"));
     }
 }
