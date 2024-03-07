@@ -12,5 +12,11 @@ public class App {
             System.out.println("Вычисление окончено");
         }
     }
+
+    public static void main(String[] args) {
+        Point point = new Point(5, 7);
+        Circle circle = new Circle(point, -2);
+        printSquare(circle);
+    }
 }
 // END
