@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 // BEGIN
+
 public class Validator {
     public static List<String> validate(Address address) {
         List<String> notValidFields = new ArrayList<>();
@@ -15,8 +16,8 @@ public class Validator {
             if (field.isAnnotationPresent(NotNull.class)) {
                 try {
                     field.setAccessible(true);
-                    Object minLength = field.get(address);
-                    if (minLength == null) {
+                    Object value = field.get(address);
+                    if (value == null) {
                         notValidFields.add(field.getName());
                     }
                 } catch (IllegalAccessException e) {
@@ -41,10 +42,10 @@ public class Validator {
                 }
                 if (field.isAnnotationPresent(MinLength.class)) {
                     MinLength minLengthAnnotation = field.getAnnotation(MinLength.class);
-                    int minLength = minLengthAnnotation.minLength();
-                    String minLength = (String) field.get(obj);
-                    if (minLength != null && minLength.length() < minLength) {
-                        errors.add("length less than " + minLength);
+                    int minLengthValue = minLengthAnnotation.minLength();
+                    String value = (String) field.get(obj);
+                    if (value != null && value.length() < minLengthValue) {
+                        errors.add("length less than " + minLengthValue);
                     }
                 }
                 if (!errors.isEmpty()) {
