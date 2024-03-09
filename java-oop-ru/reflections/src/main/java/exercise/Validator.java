@@ -15,8 +15,8 @@ public class Validator {
             if (field.isAnnotationPresent(NotNull.class)) {
                 try {
                     field.setAccessible(true);
-                    Object value = field.get(address);
-                    if (value == null) {
+                    Object minLength = field.get(address);
+                    if (minLength == null) {
                         notValidFields.add(field.getName());
                     }
                 } catch (IllegalAccessException e) {
