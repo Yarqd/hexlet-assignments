@@ -41,10 +41,10 @@ public class Validator {
                 }
                 if (field.isAnnotationPresent(MinLength.class)) {
                     MinLength minLengthAnnotation = field.getAnnotation(MinLength.class);
-                    int minLengthValue = minLengthAnnotation.value();
-                    String value = (String) field.get(obj);
-                    if (value != null && value.length() < minLengthValue) {
-                        errors.add("length less than " + minLengthValue);
+                    int minLength = minLengthAnnotation.minLength();
+                    String minLength = (String) field.get(obj);
+                    if (minLength != null && minLength.length() < minLength) {
+                        errors.add("length less than " + minLength);
                     }
                 }
                 if (!errors.isEmpty()) {
