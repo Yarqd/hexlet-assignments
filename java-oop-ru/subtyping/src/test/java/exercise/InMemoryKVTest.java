@@ -3,8 +3,10 @@ package exercise;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Map;
+import java.util.HashMap;
 
-class UpdatedInMemoryKVTest {
+
+class InMemoryKVTest {
 
     @Test
     void inMemoryKVTest() {
@@ -21,18 +23,24 @@ class UpdatedInMemoryKVTest {
         storage.unset("key");
         assertThat(storage.get("key", "def")).isEqualTo("def");
         assertThat(storage.toMap()).isEqualTo(Map.of("key2", "value2"));
+
     }
 
     @Test
     void mustBeImmutableTest() {
-        Map<String, String> initial = Map.of("key", "10");
+        Map<String, String> initial = new HashMap<>();
+        initial.put("key", "10");
+
+        Map<String, String> clonedInitial = new HashMap<>();
+        clonedInitial.putAll(initial);
 
         KeyValueStorage storage = new InMemoryKV(initial);
 
-        assertThat(initial).isEqualTo(Map.of("key", "10"));
+        initial.put("key2", "value2");
+        assertThat(storage.toMap()).isEqualTo(clonedInitial);
 
         Map<String, String> map = storage.toMap();
         map.put("key2", "value2");
-        assertThat(initial).isEqualTo(Map.of("key", "10"));
+        assertThat(storage.toMap()).isEqualTo(clonedInitial);
     }
 }
