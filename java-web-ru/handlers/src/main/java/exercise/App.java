@@ -8,17 +8,19 @@ public final class App {
     public static Javalin getApp() {
 
         // BEGIN
-        var app = Javalin.create(config -> {
-            config.defaultContentType = "application/json";
-        });
+        var app = Javalin.create();
         app.get("/phones", ctx -> {
             List<String> phones = Data.getPhones();
+            ctx.contentType("application/json");
             ctx.json(phones);
         });
+
         app.get("/domains", ctx -> {
             List<String> domains = Data.getDomains();
+            ctx.contentType("application/json");
             ctx.json(domains);
         });
+
         return app;
         // END
     }
