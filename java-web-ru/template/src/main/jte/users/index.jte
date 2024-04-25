@@ -1,4 +1,5 @@
 @import exercise.dto.users.UsersPage
+@import exercise.model.User
 @param UsersPage usersPage
 
 <!DOCTYPE html>
@@ -38,7 +39,7 @@
                     <td>${user.getName()}</td>
                     <td><a href="/users/${user.getId()}">View Details</a></td>
                 </tr>
-            @end
+            @endfor
         </tbody>
     </table>
 </body>
