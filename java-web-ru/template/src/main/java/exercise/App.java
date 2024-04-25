@@ -23,7 +23,7 @@ public final class App {
 
         // BEGIN
         app.get("/users", ctx -> {
-            ctx.render("users.jte", model("users", new UsersPage(USERS)));
+            ctx.render("users/index.jte", model("users", new UsersPage(USERS)));
         });
         app.get("/users/{id}", ctx -> {
             String idStr = ctx.pathParam("id");
@@ -32,7 +32,7 @@ public final class App {
                     .filter(u -> u.getId() == id) // Теперь сравнение идет между двумя long
                     .findFirst()
                     .orElseThrow(() -> new NotFoundResponse("User not found"));
-            ctx.render("user.jte", model("user", new UserPage(user)));
+            ctx.render("users/show.jte", model("user", new UserPage(user)));
         });
         // END
 
