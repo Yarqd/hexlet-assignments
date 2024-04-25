@@ -32,7 +32,7 @@ public final class App {
                     .filter(u -> u.getId() == id) // Теперь сравнение идет между двумя long
                     .findFirst()
                     .orElseThrow(() -> new NotFoundResponse("User not found"));
-            ctx.render("users/show.jte", model("user", new UserPage(user)));
+            ctx.render("users/show.jte", model("userPage", new UserPage(user))); // Измените здесь ключ с "user" на "userPage"
         });
         // END
 
