@@ -39,7 +39,7 @@
                     <td>${user.getFirstName()} ${user.getLastName()}</td> <!-- Исправлено здесь -->
                     <td><a href="/users/${user.getId()}">View Details</a></td>
                 </tr>
-            @end
+            @endfor
         </tbody>
     </table>
 </body>
