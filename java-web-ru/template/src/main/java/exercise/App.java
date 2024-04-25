@@ -28,7 +28,7 @@ public final class App {
         app.get("/users/{id}", ctx -> {
             String id = ctx.pathParam("id");
             User user = USERS.stream()
-                    .filter(u -> u.getId().equals(id))
+                    .filter(u -> u.getId() == id)
                     .findFirst()
                     .orElseThrow(() -> new NotFoundResponse("User not found"));
             ctx.render("user.jte", model("user", new UserPage(user)));
