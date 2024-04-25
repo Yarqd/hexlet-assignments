@@ -26,9 +26,10 @@ public final class App {
             ctx.render("users.jte", model("users", new UsersPage(USERS)));
         });
         app.get("/users/{id}", ctx -> {
-            String id = ctx.pathParam("id");
+            String idStr = ctx.pathParam("id");
+            long id = Long.parseLong(idStr); // Преобразование строки в long
             User user = USERS.stream()
-                    .filter(u -> u.getId() == id)
+                    .filter(u -> u.getId() == id) // Теперь сравнение идет между двумя long
                     .findFirst()
                     .orElseThrow(() -> new NotFoundResponse("User not found"));
             ctx.render("user.jte", model("user", new UserPage(user)));
