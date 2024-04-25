@@ -24,23 +24,27 @@
 </head>
 <body>
     <h1>Users</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for(User user : usersPage.getUsers())
+    @if(usersPage == null || usersPage.getUsers() == null || usersPage.getUsers().isEmpty())
+        <p>There are no users available at the moment.</p>
+    @else
+        <table>
+            <thead>
                 <tr>
-                    <td>${user.getId()}</td>
-                    <td>${user.getFirstName()} ${user.getLastName()}</td> <!-- Исправлено здесь -->
-                    <td><a href="/users/${user.getId()}">View Details</a></td>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Action</th>
                 </tr>
-            @endfor
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @for(User user : usersPage.getUsers())
+                    <tr>
+                        <td>${user.getId()}</td>
+                        <td>${user.getFirstName()} ${user.getLastName()}</td>
+                        <td><a href="/users/${user.getId()}">View Details</a></td>
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
+    @endif
 </body>
 </html>
