@@ -1,3 +1,4 @@
+@import exercise.model.User
 @import exercise.dto.users.UserPage
 @param UserPage userPage
 
@@ -41,13 +42,10 @@
             <dd>${userPage.getUser().getId()}</dd>
 
             <dt>Name:</dt>
-            <dd>${userPage.getUser().getName()}</dd>
+            <dd>${userPage.getUser().getFirstName()} ${userPage.getUser().getLastName()}</dd>
 
             <dt>Email:</dt>
             <dd>${userPage.getUser().getEmail()}</dd>
-
-            <dt>Phone:</dt>
-            <dd>${userPage.getUser().getPhone()}</dd>
         </dl>
     </div>
 </body>
