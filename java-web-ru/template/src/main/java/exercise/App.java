@@ -23,7 +23,7 @@ public final class App {
 
         // BEGIN
         app.get("/users", ctx -> {
-            ctx.render("users/index.jte", model("users", new UsersPage(USERS)));
+            ctx.render("users/index.jte", model("usersPage", new UsersPage(USERS)));
         });
         app.get("/users/{id}", ctx -> {
             String idStr = ctx.pathParam("id");
