@@ -1,5 +1,5 @@
-@import exercise.dto.users.UsersPage
 @import exercise.model.User
+@import exercise.dto.users.UsersPage
 @param UsersPage usersPage
 
 <!DOCTYPE html>
@@ -36,10 +36,10 @@
             @for(User user : usersPage.getUsers())
                 <tr>
                     <td>${user.getId()}</td>
-                    <td>${user.getName()}</td>
+                    <td>${user.getFirstName()} ${user.getLastName()}</td> <!-- Исправлено здесь -->
                     <td><a href="/users/${user.getId()}">View Details</a></td>
                 </tr>
-            @endfor
+            @end
         </tbody>
     </table>
 </body>
