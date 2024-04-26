@@ -1,12 +1,12 @@
 @import java.util.Map
-@param content: String
+@param String content
 @param Map<String, Object> params
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>@params.get("title")</title>
+    <title>${params.get("title")}</title> <!-- Исправлено использование params -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
             rel="stylesheet"
             integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
@@ -24,7 +24,7 @@
         </div>
     </header>
     <main class="container mt-4">
-        @content
+        ${content} <!-- Исправлено использование content -->
     </main>
     <footer class="text-muted py-4 bg-light">
         <div class="container">
