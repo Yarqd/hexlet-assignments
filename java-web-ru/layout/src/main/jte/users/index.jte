@@ -1,16 +1,16 @@
 @import exercise.model.User
-@import java.util.List
-@param List<User> users
+@import exercise.dto.users.UsersPage
+@param UsersPage page
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Users List</title>
+    <title>List of Users</title>
 </head>
 <body>
-    <h1>List of Users</h1>
-    @if(users.isEmpty()) {
+    <h1>Users</h1>
+    @if(page.getUsers().isEmpty()) {
         <p>No users found.</p>
     } @else {
         <table>
@@ -19,16 +19,14 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-            @for(User user : users) {
+            @for(User user : page.getUsers()) {
                 <tr>
                     <td>${user.getId()}</td>
                     <td>${user.getFirstName()} ${user.getLastName()}</td>
                     <td>${user.getEmail()}</td>
-                    <td><a href="/users/${user.getId()}">View Details</a></td>
                 </tr>
             }
             @endfor
