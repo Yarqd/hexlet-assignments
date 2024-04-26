@@ -1,7 +1,12 @@
 @import exercise.model.User
 @import java.util.Map
+@import java.util.HashMap
 @param User user
-@param Map<String, Object> params
+
+@{
+    Map<String, Object> params = new HashMap<>();
+    params.put("title", "User Details - " + user.getFirstName() + " " + user.getLastName());
+}
 
 @template.layout.page(params) {
     <h1>User Details</h1>
