@@ -29,7 +29,7 @@
                             <a href="/users/${user.getId()}">View Details</a>
                         </td>
                     </tr>
-                }
+                } @endfor
                 </tbody>
             </table>
         </div>
