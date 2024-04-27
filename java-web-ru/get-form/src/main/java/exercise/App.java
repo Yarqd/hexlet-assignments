@@ -23,12 +23,10 @@ public final class App {
 
         // BEGIN
         app.get("/users", ctx -> {
-            String searchTerm = ctx.queryParam("term", "");
-
+            String term = ctx.queryParam("term");
             List<User> filteredUsers = USERS.stream()
-                    .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), searchTerm))
+                    .filter(user -> user.getFirstName().toLowerCase().startsWith(term.toLowerCase()))
                     .collect(Collectors.toList());
-
             ctx.json(filteredUsers);
         });
         // END
