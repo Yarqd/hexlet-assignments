@@ -2,7 +2,7 @@
 @import exercise.dto.users.UsersPage
 @param UsersPage page
 
-@template.layout.page(model("title", "List of Users")) {
+@template.layout.page(model("title", "List of Users"), content = `
     <h1>Users</h1>
     @if(page.getUsers().isEmpty()) {
         <p>No users found.</p>
@@ -27,4 +27,8 @@
                     </td>
                 </tr>
             }
-
+            @endfor
+            </tbody>
+        </table>
+    }
+`)
