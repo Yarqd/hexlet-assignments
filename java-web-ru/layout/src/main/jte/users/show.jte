@@ -2,7 +2,7 @@
 @import gg.jte.Content
 @param User user
 
-@template.layout.page(Content content = @`
+@template.layout.page(@Content`
     <h1>User Details</h1>
     <div class="card" style="width: 18rem;">
         <div class="card-body">

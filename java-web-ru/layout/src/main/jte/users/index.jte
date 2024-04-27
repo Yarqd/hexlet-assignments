@@ -3,7 +3,7 @@
 @import gg.jte.Content
 @param UsersPage page
 
-@template.layout.page(Content content = @`
+@template.layout.page(@Content`
     <h1>Users List</h1>
     <div class="list-group">
     @for(User user : page.getUsers()) {
@@ -14,4 +14,7 @@
     @if(page.getUsers().isEmpty()) {
         <div class="alert alert-warning" role="alert">
             No users found.
-        </div
+        </div>
+    }
+    </div>
+`)
