@@ -1,23 +1,18 @@
-@import java.util.Map
-@param String content
-@param Map<String, Object> params
+@import gg.jte.Content
+@param Content content
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>${params.get("title")}</title>
+    <title>Site Layout</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a href="/" class="navbar-brand d-flex align-items-center">
-                <strong>Home</strong>
-            </a>
-            <a href="/users" class="navbar-brand d-flex align-items-center">
-                <strong>Users</strong>
-            </a>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/users">Users</a>
         </div>
     </header>
 
@@ -25,12 +20,9 @@
         ${content}
     </main>
 
-    <footer class="text-muted py-4 bg-light">
+    <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
-            <p class="float-end mb-1">
-                <a href="#">Back to top</a>
-            </p>
-            <p>Example project © 2024</p>
+            <span class="text-muted">Visit my <a href="https://gitlab.com/yourusername">GitLab profile</a>.</span>
         </div>
     </footer>
 </body>
