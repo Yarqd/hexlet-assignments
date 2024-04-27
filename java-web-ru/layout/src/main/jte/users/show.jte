@@ -3,7 +3,7 @@
 @param User user
 @param Map<String, Object> params
 
-@template.layout.page(model("title", "User Details", "content", `
+@template.layout.page(`
     <h1>User Details</h1>
     <div class="card">
         <div class="card-body">
@@ -11,4 +11,4 @@
             <p class="card-text">${user.getEmail()}</p>
         </div>
     </div>
-`))
+`, model("title", "User Details"))
