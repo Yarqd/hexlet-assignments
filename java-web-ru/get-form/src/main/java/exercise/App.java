@@ -22,11 +22,16 @@ public final class App {
         // BEGIN
         app.get("/users", ctx -> {
             String term = ctx.queryParam("term");
-            List<User> filteredUsers = USERS.stream()
-                    .filter(user -> user.getFirstName().toLowerCase().startsWith(term.toLowerCase()))
-                    .collect(Collectors.toList());
-            ctx.json(filteredUsers);
+            if (term != null) {
+                List<User> filteredUsers = USERS.stream()
+                        .filter(user -> user.getFirstName().toLowerCase().startsWith(term.toLowerCase()))
+                        .collect(Collectors.toList());
+                ctx.json(filteredUsers);
+            } else {
+                ctx.json(USERS);
+            }
         });
+
         // END
 
         app.get("/", ctx -> {
