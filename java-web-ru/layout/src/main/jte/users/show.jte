@@ -1,14 +1,9 @@
 @import exercise.model.User
 @import java.util.Map
-@import java.util.HashMap
 @param User user
+@param Map<String, Object> params
 
-@{
-    Map<String, Object> params = new HashMap<>();
-    params.put("title", "User Details - " + user.getFirstName() + " " + user.getLastName());
-}
-
-@template.layout.page(params) {
+@template.layout.page(model("title", "User Details")) {
     <h1>User Details</h1>
     <div class="card">
         <div class="card-body">

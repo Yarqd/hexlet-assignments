@@ -1,4 +1,3 @@
-@import java.util.Map
 @import exercise.model.User
 @import exercise.dto.users.UsersPage
 @param UsersPage page
@@ -28,9 +27,4 @@
                     </td>
                 </tr>
             }
-            @endfor
-            </tbody>
-        </table>
-    }
-    @endif
-}
+
