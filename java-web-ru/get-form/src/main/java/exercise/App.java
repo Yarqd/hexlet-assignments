@@ -4,6 +4,8 @@ import io.javalin.Javalin;
 import java.util.List;
 import exercise.model.User;
 import io.javalin.rendering.template.JavalinJte;
+import java.util.stream.Collectors;
+
 
 public final class App {
 
