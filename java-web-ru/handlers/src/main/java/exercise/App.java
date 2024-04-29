@@ -9,10 +9,11 @@ public final class App {
 
         // BEGIN
         var app = Javalin.create();
+        // Передаем обработчик запроса
         app.get("/phones", ctx -> {
-            List<String> phones = Data.getPhones();
-            ctx.contentType("application/json");
+            List<String> res = Data.getPhones();
             ctx.json(phones);
+        }
         });
 
         app.get("/domains", ctx -> {
