@@ -13,7 +13,7 @@ public final class App {
         app.get("/phones", ctx -> {
             List<String> res = Data.getPhones();
             ctx.contentType("application/json");
-            ctx.json(phones);
+            ctx.json(res);
         }
         });
 
