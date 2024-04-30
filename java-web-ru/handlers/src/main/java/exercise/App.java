@@ -14,7 +14,6 @@ public final class App {
             List<String> res = Data.getPhones();
             ctx.contentType("application/json");
             ctx.json(res);
-        }
         });
 
         app.get("/domains", ctx -> {
