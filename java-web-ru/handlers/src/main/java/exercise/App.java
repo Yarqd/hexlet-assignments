@@ -12,6 +12,7 @@ public final class App {
         // Передаем обработчик запроса
         app.get("/phones", ctx -> {
             List<String> res = Data.getPhones();
+            ctx.contentType("application/json");
             ctx.json(phones);
         }
         });
