@@ -1,6 +1,7 @@
-@import gg.jte.Content
+@import org.example.MainPage
+@param MainPage mainPage
 
-@template.layout.page(@Content`
-    <h1>Welcome to Our Site!</h1>
-    <p>This is a great place to get started with our application. Enjoy your stay!</p>
+@template.layout.page(content = @`
+    <h1>Welcome to My JTE Site!</h1>
+    <p>Hello, ${mainPage.getWelcomeMessage()}!</p>
 `)

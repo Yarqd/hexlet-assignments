@@ -1,20 +1,10 @@
-@import exercise.model.User
-@import exercise.dto.users.UsersPage
-@import gg.jte.Content
+@import org.example.hexlet.dto.UsersPage
 @param UsersPage page
 
-@template.layout.page(@Content`
-    <h1>Users List</h1>
-    <div class="list-group">
-    @for(User user : page.getUsers()) {
-        <a href="/users/${user.getId()}" class="list-group-item list-group-item-action">
-            ${user.getFirstName()} ${user.getLastName()} - ${user.getEmail()}
-        </a>
-    }
-    @if(page.getUsers().isEmpty()) {
-        <div class="alert alert-warning" role="alert">
-            No users found.
-        </div>
-    }
-    </div>
-`)
+@template.layout.page(content = @`
+    <h1>List of Users</h1>
+    <a href="/users/new">New User</a>
+    @for(var user : page.getUsers()) {
+        <div>${user.getName()}</div>
+        }
+        `)

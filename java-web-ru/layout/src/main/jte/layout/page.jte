@@ -1,29 +1,22 @@
+<%--тут пишем ОБЩИЙ шаблон для страницы, эта информация будет всегда и везде.--%>
+<%--В нее будет в определенном месте помещаться различный части от других шаблонов--%>
+<%--это: <!doctype html> и тд и тп--%>
+
 @import gg.jte.Content
 @param Content content
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Site Layout</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hexlet Javalin Example</title>
 </head>
 <body>
-    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Home</a>
-            <a class="navbar-brand" href="/users">Users</a>
-        </div>
-    </header>
-
-    <main class="container mt-4">
-        ${content}
-    </main>
-
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-            <span class="text-muted">Visit my <a href="https://gitlab.com/yourusername">GitLab profile</a>.</span>
-        </div>
-    </footer>
+<p>
+    <a href="/users">Users</a>
+    <a href="/courses">Courses</a>
+</p>
+${content}
 </body>
 </html>
