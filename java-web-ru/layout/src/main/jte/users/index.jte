@@ -7,4 +7,5 @@
     @for(var user : page.getUsers()) {
         <div>${user.getName()}</div>
         }
-        `)
+    @endfor
+`)
