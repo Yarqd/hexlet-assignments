@@ -1,5 +1,6 @@
 @import gg.jte.Content
 @param Content content
+@param Content footer = null
 
 <!doctype html>
 <html lang="en">
@@ -14,5 +15,12 @@
     <a href="/users">Users</a>
 </p>
 ${content}
+@if (footer != null)
+    <footer>
+        <div>
+            ${footer}
+        </div>
+    </footer>
+@endif
 </body>
 </html>
