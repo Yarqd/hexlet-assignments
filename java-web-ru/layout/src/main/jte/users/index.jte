@@ -1,13 +1,19 @@
 @import exercise.dto.users.UsersPage
-@import exercise.dto.users.UserPage
-
 @param UsersPage page
 
-@template.layout.page(content = @`
+@template.layout.page(
+content = @`
     <h1>List of Users</h1>
+
     <a href="/users/new">New User</a>
-    @for(var user : page.getUsers()) {
-        <div>${user.getFirstName()} ${user.getLastName()}</div>
-        }
+    @for(var user : page.getUsers())
+        <tr>
+            <td><a href="/users/${user.getId()}">${user.getFirstName()} ${user.getLastName()}</a></td>
+        </tr>
     @endfor
-`)
+`
+footer = @`
+<p>Iaroslav Rodionov</p>
+    <p><a href="https://github.com/Yarqd">My GitHub profile</a></p>
+`
+)
