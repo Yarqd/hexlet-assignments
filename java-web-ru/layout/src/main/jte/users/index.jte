@@ -12,8 +12,8 @@ content = @`
             <td><a href="/users/${user.getId()}">${user.getFirstName()} ${user.getLastName()}</a></td>
         </tr>
         }
-        </table>
     @endfor
+        </table>
         `,
         footer = @`
             <p>Iaroslav Rodionov</p>
