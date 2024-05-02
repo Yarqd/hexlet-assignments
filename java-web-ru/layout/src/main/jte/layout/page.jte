@@ -1,7 +1,3 @@
-<%--тут пишем ОБЩИЙ шаблон для страницы, эта информация будет всегда и везде.--%>
-<%--В нее будет в определенном месте помещаться различный части от других шаблонов--%>
-<%--это: <!doctype html> и тд и тп--%>
-
 @import gg.jte.Content
 @param Content content
 
@@ -14,8 +10,8 @@
 </head>
 <body>
 <p>
+    <a href="/">Home</a>
     <a href="/users">Users</a>
-    <a href="/courses">Courses</a>
 </p>
 ${content}
 </body>
