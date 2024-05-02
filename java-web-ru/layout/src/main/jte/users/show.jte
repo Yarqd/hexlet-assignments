@@ -1,5 +1,6 @@
 @import exercise.dto.users.UsersPage
 @import exercise.dto.users.UserPage
+@import exercise.model.User
 
 @param User user
 
