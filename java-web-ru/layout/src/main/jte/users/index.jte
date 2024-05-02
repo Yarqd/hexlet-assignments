@@ -6,7 +6,7 @@
 @template.layout.page(content = @`
     <h1>List of Users</h1>
     <a href="/users/new">New User</a>
-    @for(var user : page.getUsers()) {
+    @for(var user : page.getUser()) {
         <div>${user.getFirstName()} ${user.getLastName()}</div>
         }
     @endfor
