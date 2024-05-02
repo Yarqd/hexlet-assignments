@@ -13,6 +13,7 @@ content = @`
         </tr>
         }
         </table>
+    @endfor
         `,
         footer = @`
             <p>Iaroslav Rodionov</p>
