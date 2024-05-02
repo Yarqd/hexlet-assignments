@@ -4,8 +4,16 @@
 
 @param User user
 
-@template.layout.page(content = @`
-    <h1>User: ${user.getFirstName()} ${user.getLastName()}</h1>
-    <p>Email: ${user.getEmail()}</p>
-    <a href="/users">Back to Users List</a>
-`)
+@if(user != null) {
+    @template.layout.page(content = @`
+        <h1>User: ${user.getFirstName()} ${user.getLastName()}</h1>
+        <p>Email: ${user.getEmail()}</p>
+        <a href="/users">Back to Users List</a>
+    `)
+    } @else {
+    @template.layout.page(content = @`
+        <h1>User not found</h1>
+        <a href="/users">Back to Users List</a>
+    `)
+    }
+@endif
