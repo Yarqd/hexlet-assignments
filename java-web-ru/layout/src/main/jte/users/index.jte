@@ -7,7 +7,7 @@
     <h1>List of Users</h1>
     <a href="/users/new">New User</a>
     @for(var user : page.getUsers()) {
-        <div>${user.getName()}</div>
+        <div>${user.getFirstName()}</div>
         }
     @endfor
 `)
