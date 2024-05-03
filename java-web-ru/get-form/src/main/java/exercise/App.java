@@ -23,14 +23,15 @@ public final class App {
 
         // BEGIN
         app.get("/users", ctx -> {
-            String term = ctx.queryParam("term", "");
+            String term = ctx.queryParam("term");
+            if (term == null) {
+                term = "";
+            }
             List<User> filteredUsers = USERS.stream()
                     .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), term))
                     .collect(Collectors.toList());
-
-            ctx.render("users/index.jte", model("page", new UsersPage(filteredUsers)));
+            ctx.render("users/index.jte", model("page", new UsersPage(filteredUsers, term)));
         });
-
         // END
 
         app.get("/", ctx -> {
