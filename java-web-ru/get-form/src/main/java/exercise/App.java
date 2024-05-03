@@ -21,9 +21,13 @@ public final class App {
         });
 
         app.get("/users", ctx -> {
-            final String term = ctx.queryParam("term", ""); // Присваиваем значение сразу и делаем переменную final
+            String term = ctx.queryParam("term"); // Получаем параметр запроса
+            if (term == null) {
+                term = ""; // Устанавливаем значение по умолчанию, если параметр не задан
+            }
+            final String finalTerm = term; // Финализируем переменную для использования в лямбда
             List<User> filteredUsers = USERS.stream()
-                    .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), term))
+                    .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), finalTerm))
                     .collect(Collectors.toList());
             ctx.render("users/index.jte", model("page", new UsersPage(filteredUsers, term)));
         });
