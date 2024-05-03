@@ -14,13 +14,17 @@ public final class App {
     private static final List<User> USERS = Data.getUsers();
 
     public static Javalin getApp() {
+
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte());
         });
 
         app.get("/users", ctx -> {
-            final String term = ctx.queryParam("term", ""); // Задаем значение по умолчанию и делаем переменную final
+            String term = ctx.queryParam("term"); // Получаем параметр запроса
+            if (term == null) {
+                term = ""; // Устанавливаем значение по умолчанию, если параметр отсутствует
+            }
             List<User> filteredUsers = USERS.stream()
                     .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), term))
                     .collect(Collectors.toList());
