@@ -21,10 +21,7 @@ public final class App {
         });
 
         app.get("/users", ctx -> {
-            String term = ctx.queryParam("term"); // Получаем параметр запроса
-            if (term == null) {
-                term = ""; // Устанавливаем значение по умолчанию, если параметр отсутствует
-            }
+            final String term = ctx.queryParam("term", ""); // Присваиваем значение сразу и делаем переменную final
             List<User> filteredUsers = USERS.stream()
                     .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), term))
                     .collect(Collectors.toList());
