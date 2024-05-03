@@ -7,33 +7,25 @@ import exercise.dto.users.UsersPage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 
 public final class App {
 
-    // Каждый пользователь представлен объектом класса User
     private static final List<User> USERS = Data.getUsers();
 
     public static Javalin getApp() {
-
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte());
         });
 
-        // BEGIN
         app.get("/users", ctx -> {
-            String term = ctx.queryParam("term");
-            if (term == null) {
-                term = "";
-            }
+            final String term = ctx.queryParam("term", ""); // Задаем значение по умолчанию и делаем переменную final
             List<User> filteredUsers = USERS.stream()
                     .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), term))
                     .collect(Collectors.toList());
             ctx.render("users/index.jte", model("page", new UsersPage(filteredUsers, term)));
         });
-        // END
 
         app.get("/", ctx -> {
             ctx.render("index.jte");
