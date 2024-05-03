@@ -3,9 +3,11 @@ package exercise;
 import io.javalin.Javalin;
 import java.util.List;
 import exercise.model.User;
+import exercise.dto.users.UsersPage;
+import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
-import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 
 public final class App {
 
@@ -21,17 +23,14 @@ public final class App {
 
         // BEGIN
         app.get("/users", ctx -> {
-            String term = ctx.queryParam("term");
-            List<User> filteredUsers;
-            if (term != null && !term.isEmpty()) {
-                filteredUsers = USERS.stream()
-                        .filter(user -> user.getFirstName().toLowerCase().startsWith(term.toLowerCase()))
-                        .collect(Collectors.toList());
-            } else {
-                filteredUsers = USERS;
-            }
-            ctx.json(filteredUsers);
+            String term = ctx.queryParam("term", "");
+            List<User> filteredUsers = USERS.stream()
+                    .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), term))
+                    .collect(Collectors.toList());
+
+            ctx.render("users/index.jte", model("page", new UsersPage(filteredUsers)));
         });
+
         // END
 
         app.get("/", ctx -> {
