@@ -39,7 +39,7 @@ public final class App {
             String title = ctx.formParam("title");
             String content = ctx.formParam("content");
             var page = new BuildArticlePage(title, content, null);
-            
+
             try {
                 if (title == null || title.length() < 2) {
                     page.addError("title", "Название не должно быть короче двух символов");

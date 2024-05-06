@@ -5,29 +5,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class BuildArticlePage {
     private String title;
     private String content;
-    private Map<String, List<String>> errors;
+    // Инициализация поля errors при объявлении, что обеспечит его инициализацию в любом конструкторе
+    private Map<String, List<String>> errors = new HashMap<>();
+
+    public BuildArticlePage() {
+        // Поле errors уже инициализировано выше, поэтому конструктор пуст
+    }
 
     public BuildArticlePage(String title, String content) {
         this.title = title;
         this.content = content;
-        this.errors = new HashMap<>();
+        // Поле errors уже инициализировано выше, поэтому конструктор не требует дополнительной инициализации
     }
 
+    // Метод для добавления ошибок в карту
     public void addError(String field, String message) {
         errors.computeIfAbsent(field, k -> new ArrayList<>()).add(message);
     }
 
+    // Метод для проверки наличия ошибок
     public boolean hasErrors() {
-        return errors != null && !errors.isEmpty();
+        return !errors.isEmpty();
     }
 }
