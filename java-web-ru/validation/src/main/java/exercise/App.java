@@ -32,19 +32,23 @@ public final class App {
 
         // BEGIN
         app.get("/articles/build", ctx -> {
-            ctx.render("articles/build.jte", model("page", new BuildArticlePage()));
+            ctx.render("articles/build.jte", model("page", new BuildArticlePage("", "", null)));
         });
 
         app.post("/articles", ctx -> {
             String title = ctx.formParam("title");
             String content = ctx.formParam("content");
 
-            Map<String, List<ValidationError>> errors = ArticleRepository.validateArticle(title, content);
-            if (!errors.isEmpty()) {
+            if (title.length() < 2 || content.length() < 10 || ArticleRepository.existsByTitle(title)) {
+                Map<String, String> errors = Map.of(
+                        "title", title.length() < 2 ? "Название не должно быть короче двух символов" : "",
+                        "content", content.length() < 10 ? "Статья должна быть не короче 10 символов" : "",
+                        "unique", ArticleRepository.existsByTitle(title) ? "Статья с таким названием уже существует" : ""
+                );
                 ctx.status(422);
                 ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, errors)));
             } else {
-                Article article = new Article(title, Security.encrypt(content));
+                Article article = new Article(title, content);
                 ArticleRepository.save(article);
                 ctx.redirect("/articles");
             }

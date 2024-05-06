@@ -5,37 +5,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Article</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Создание статьи</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-5">
-    <h1>Create New Article</h1>
-    <form action="/articles" method="POST">
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control ${page.errors != null && page.errors.containsKey('title') ? 'is-invalid' : ''}" id="title" name="title" value="${page.title ? page.title : ''}" required>
+<div class="container">
+    <h1>Создать новую статью</h1>
+    <form action="/articles" method="post">
+        <div class="mb-3">
+            <label for="title" class="form-label">Название статьи</label>
+            <input type="text" class="form-control ${page.errors != null && !page.errors.get("title").isEmpty() ? "is-invalid" : ""}" id="title" name="title" value="${page.title}">
             <div class="invalid-feedback">
-                @if(page.errors != null && page.errors.containsKey('title'))
-                    @for(var error : page.errors.get('title'))
-                        <div>${error.message}</div>
-                    @endfor
-                @endif
+                ${page.errors != null ? page.errors.get("title") : ""}
             </div>
         </div>
-        <div class="form-group">
-            <label for="content">Content</label>
-            <textarea class="form-control ${page.errors != null && page.errors.containsKey('content') ? 'is-invalid' : ''}" id="content" name="content" rows="5" required>${page.content ? page.content : ''}</textarea>
+        <div class="mb-3">
+            <label for="content" class="form-label">Содержание статьи</label>
+            <textarea class="form-control ${page.errors != null && !page.errors.get("content").isEmpty() ? "is-invalid" : ""}" id="content" name="content" rows="5">${page.content}</textarea>
             <div class="invalid-feedback">
-                @if(page.errors != null && page.errors.containsKey('content'))
-                    @for(var error : page.errors.get('content'))
-                        <div>${error.message}</div>
-                    @endfor
-                @endif
+                ${page.errors != null ? page.errors.get("content") : ""}
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Создать статью</button>
     </form>
 </div>
 </body>

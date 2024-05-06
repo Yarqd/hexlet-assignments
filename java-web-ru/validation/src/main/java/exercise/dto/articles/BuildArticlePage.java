@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Getter;
 
 // BEGIN
+@Getter
+@NoArgsConstructor // Создает конструктор без аргументов для использования в Javalin.
+@AllArgsConstructor // Создает конструктор со всеми полями, включая ошибки валидации.
 public class BuildArticlePage {
-    private String title;
-    private String content;
-    private Map<String, List<String>> errors;
+    private String title; // Заголовок статьи
+    private String content; // Содержание статьи
+    private Map<String, List<ValidationError>> errors; // Ошибки валидации по каждому полю
 }
 // END
