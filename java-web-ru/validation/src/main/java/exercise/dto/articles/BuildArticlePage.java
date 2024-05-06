@@ -1,26 +1,33 @@
 package exercise.dto.articles;
 
-import io.javalin.validation.ValidationError;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Getter;
 
-// BEGIN
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
+@AllArgsConstructor
 public class BuildArticlePage {
     private String title;
     private String content;
-    private Map<String, List<ValidationError>> errors;
+    private Map<String, List<String>> errors;
 
-    public void setErrors(Map<String, List<ValidationError>> errors) {
-        this.errors = errors;
+    public BuildArticlePage(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.errors = new HashMap<>();
+    }
+
+    public void addError(String field, String message) {
+        errors.computeIfAbsent(field, k -> new ArrayList<>()).add(message);
+    }
+
+    public boolean hasErrors() {
+        return errors != null && !errors.isEmpty();
     }
 }
-
-
-// END
