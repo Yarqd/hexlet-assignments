@@ -1,17 +1,15 @@
 package exercise;
 
 import io.javalin.Javalin;
-import io.javalin.validation.ValidationError;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import exercise.model.Article;
 import exercise.dto.articles.ArticlesPage;
 import exercise.dto.articles.BuildArticlePage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
+import java.util.Map;
+
 import exercise.repository.ArticleRepository;
-import exercise.util.Security;
 
 public final class App {
 
@@ -32,24 +30,32 @@ public final class App {
             ctx.render("articles/index.jte", model("page", page));
         });
 
+        // BEGIN
         app.get("/articles/build", ctx -> {
-            ctx.render("articles/build.jte", model("page", new BuildArticlePage("", "", null)));
+            var page = new BuildArticlePage();
+            ctx.render("articles/build.jte", model("page", page));
         });
 
         app.post("/articles", ctx -> {
             String title = ctx.formParam("title");
             String content = ctx.formParam("content");
+            var page = new BuildArticlePage(title, content, null);
 
-            Map<String, List<ValidationError>> errors = ArticleRepository.validateArticle(title, content);
-            if (!errors.isEmpty()) {
-                ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, errors)));
-            } else {
-                Article article = new Article(title, Security.encrypt(content));
-                ArticleRepository.save(article);
+            Map<String, List<ValidationError>> errors = ctx.validate(() -> page)
+                    .check("title", p -> p.getTitle() != null && p.getTitle().length() >= 2, "Название не должно быть короче двух символов")
+                    .check("content", p -> p.getContent() != null && p.getContent().length() >= 10, "Статья должна быть не короче 10 символов")
+                    .check("title", p -> ArticleRepository.findByTitle(p.getTitle()) == null, "Статья с таким названием уже существует")
+                    .getErrors();
+
+            if (errors.isEmpty()) {
+                ArticleRepository.addEntity(new Article(title, content));
                 ctx.redirect("/articles");
+            } else {
+                page.setErrors(errors);
+                ctx.render("articles/build.jte", model("page", page));
             }
         });
+        // END
 
         return app;
     }
