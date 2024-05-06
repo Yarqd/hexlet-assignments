@@ -1,15 +1,17 @@
 package exercise;
 
 import io.javalin.Javalin;
+import io.javalin.validation.ValidationError;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import exercise.model.Article;
 import exercise.dto.articles.ArticlesPage;
 import exercise.dto.articles.BuildArticlePage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
-import java.util.Map;
-
 import exercise.repository.ArticleRepository;
+import exercise.util.Security;
 
 public final class App {
 
@@ -30,7 +32,6 @@ public final class App {
             ctx.render("articles/index.jte", model("page", page));
         });
 
-        // BEGIN
         app.get("/articles/build", ctx -> {
             ctx.render("articles/build.jte", model("page", new BuildArticlePage("", "", null)));
         });
@@ -39,22 +40,16 @@ public final class App {
             String title = ctx.formParam("title");
             String content = ctx.formParam("content");
 
-            if (title.length() < 2 || content.length() < 10 || ArticleRepository.existsByTitle(title)) {
-                Map<String, String> errors = Map.of(
-                        "title", title.length() < 2 ? "Название не должно быть короче двух символов" : "",
-                        "content", content.length() < 10 ? "Статья должна быть не короче 10 символов" : "",
-                        "unique", ArticleRepository.existsByTitle(title) ? "Статья с таким названием" +
-                                "уже существует" : ""
-                );
+            Map<String, List<ValidationError>> errors = ArticleRepository.validateArticle(title, content);
+            if (!errors.isEmpty()) {
                 ctx.status(422);
                 ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, errors)));
             } else {
-                Article article = new Article(title, content);
+                Article article = new Article(title, Security.encrypt(content));
                 ArticleRepository.save(article);
                 ctx.redirect("/articles");
             }
         });
-        // END
 
         return app;
     }
