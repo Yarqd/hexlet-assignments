@@ -1,13 +1,13 @@
 package exercise;
 
 import io.javalin.Javalin;
-import io.javalin.validation.ValidationException;
 import java.util.List;
 import exercise.model.Article;
 import exercise.dto.articles.ArticlesPage;
 import exercise.dto.articles.BuildArticlePage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
+import java.util.Map;
 
 import exercise.repository.ArticleRepository;
 
@@ -43,7 +43,8 @@ public final class App {
                 Map<String, String> errors = Map.of(
                         "title", title.length() < 2 ? "Название не должно быть короче двух символов" : "",
                         "content", content.length() < 10 ? "Статья должна быть не короче 10 символов" : "",
-                        "unique", ArticleRepository.existsByTitle(title) ? "Статья с таким названием уже существует" : ""
+                        "unique", ArticleRepository.existsByTitle(title) ? "Статья с таким названием" +
+                                "уже существует" : ""
                 );
                 ctx.status(422);
                 ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, errors)));
