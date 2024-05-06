@@ -38,8 +38,8 @@ public final class App {
         app.post("/articles", ctx -> {
             String title = ctx.formParam("title");
             String content = ctx.formParam("content");
-            var page = new BuildArticlePage(title, content, null); // Создаем экземпляр страницы с данными формы и возможными ошибками
-
+            var page = new BuildArticlePage(title, content, null);
+            
             try {
                 if (title == null || title.length() < 2) {
                     page.addError("title", "Название не должно быть короче двух символов");
@@ -54,7 +54,7 @@ public final class App {
                 if (page.hasErrors()) {
                     ctx.render("articles/build.jte", model("page", page));
                 } else {
-                    ArticleRepository.save(new Article(0, title, content));
+                    ArticleRepository.save(new Article(title, content));
                     ctx.redirect("/articles");
                 }
             } catch (ValidationException e) {
