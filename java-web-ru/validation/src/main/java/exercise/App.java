@@ -32,35 +32,34 @@ public final class App {
 
         // BEGIN
         app.get("/articles/build", ctx -> {
-            ctx.render("articles/build.jte");
+            ctx.render("articles/build.jte", model("page", new BuildArticlePage("", "", null)));
         });
 
         app.post("/articles", ctx -> {
             String title = ctx.formParam("title");
             String content = ctx.formParam("content");
-            var page = new BuildArticlePage(title, content, null);
 
-            try {
-                if (title == null || title.length() < 2) {
-                    page.addError("title", "Название не должно быть короче двух символов");
-                }
-                if (content == null || content.length() < 10) {
-                    page.addError("content", "Статья должна быть не короче 10 символов");
-                }
-                if (ArticleRepository.existsByTitle(title)) {
-                    page.addError("title", "Статья с таким названием уже существует");
-                }
-
-                if (page.hasErrors()) {
-                    ctx.render("articles/build.jte", model("page", page));
-                } else {
-                    ArticleRepository.save(new Article(title, content));
-                    ctx.redirect("/articles");
-                }
-            } catch (ValidationException e) {
-                ctx.status(400);
-                ctx.render("articles/build.jte", model("errors", e.getErrors()));
+            if (title.length() < 2) {
+                ctx.status(422);
+                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of("title", List.of("Название не должно быть короче двух символов")))));
+                return;
             }
+
+            if (content.length() < 10) {
+                ctx.status(422);
+                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of("content", List.of("Статья должна быть не короче 10 символов")))));
+                return;
+            }
+
+            if (ArticleRepository.existsByTitle(title)) {
+                ctx.status(422);
+                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of("title", List.of("Статья с таким названием уже существует")))));
+                return;
+            }
+
+            Article article = new Article(title, content);
+            ArticleRepository.save(article);
+            ctx.redirect("/articles");
         });
         // END
 

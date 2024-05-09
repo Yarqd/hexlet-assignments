@@ -1,40 +1,28 @@
 @import exercise.dto.articles.BuildArticlePage
-@param page BuildArticlePage
+@param BuildArticlePage page
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Создание статьи</title>
-</head>
-<body>
-<h1>Создание новой статьи</h1>
-
-@if (page.hasErrors())
-<div class="errors">
+@if(page.getErrors() != null)
     <ul>
-        @for (entry : page.getErrors().entrySet())
-        <li>${entry.getKey()}:</li>
-        @for (error : entry.getValue())
-        <li>${error}</li>
-        @endif
-        @endif
+        @for(var entry : page.getErrors().entrySet())
+            @for(var error : entry.getValue())
+                <li>${error}</li>
+            @endfor
+        @endfor
     </ul>
-</div>
 @endif
 
 <form action="/articles" method="post">
     <div>
-        <label for="title">Название статьи</label>
-        <input type="text" id="title" name="title" value="${page.getTitle()}" required>
+        <label>
+            Название статьи
+            <input type="text" name="title" value="${page.getTitle()}" />
+        </label>
     </div>
     <div>
-        <label for="content">Содержимое</label>
-        <textarea id="content" name="content" required>${page.getContent()}</textarea>
+        <label>
+            Содержимое статьи
+            <textarea name="content">${page.getContent()}</textarea>
+        </label>
     </div>
-    <div>
-        <button type="submit">Создать</button>
-    </div>
+    <input type="submit" value="Создать статью" />
 </form>
-</body>
-</html>
