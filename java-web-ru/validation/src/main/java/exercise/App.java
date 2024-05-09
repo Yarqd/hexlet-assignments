@@ -1,7 +1,6 @@
 package exercise;
 
 import io.javalin.Javalin;
-import io.javalin.validation.ValidationException;
 import java.util.List;
 import exercise.model.Article;
 import exercise.dto.articles.ArticlesPage;
@@ -41,19 +40,22 @@ public final class App {
 
             if (title.length() < 2) {
                 ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of("title", List.of("Название не должно быть короче двух символов")))));
+                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of(
+                        "title", List.of("Название не должно быть короче двух символов")))));
                 return;
             }
 
             if (content.length() < 10) {
                 ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of("content", List.of("Статья должна быть не короче 10 символов")))));
+                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of(
+                        "content", List.of("Статья должна быть не короче 10 символов")))));
                 return;
             }
 
             if (ArticleRepository.existsByTitle(title)) {
                 ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of("title", List.of("Статья с таким названием уже существует")))));
+                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of(
+                        "title", List.of("Статья с таким названием уже существует")))));
                 return;
             }
 
