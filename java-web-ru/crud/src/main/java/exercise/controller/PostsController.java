@@ -9,12 +9,7 @@ import exercise.dto.posts.PostsPage;
 public class PostsController {
 
     public static void listPosts(Context ctx) {
-        String pageStr = ctx.queryParam("page");
-        if (pageStr == null || pageStr.isEmpty()) {
-            pageStr = "1";
-        }
-        int page = Integer.parseInt(pageStr);
-
+        int page = Integer.parseInt(ctx.queryParam("page", "1"));
         int pageSize = 5;
         var posts = PostRepository.findAll(page, pageSize);
         int totalPages = (int) Math.ceil((double) PostRepository.getEntities().size() / pageSize);
@@ -30,4 +25,3 @@ public class PostsController {
         ctx.render("posts/show.jte", model("post", post));
     }
 }
-
