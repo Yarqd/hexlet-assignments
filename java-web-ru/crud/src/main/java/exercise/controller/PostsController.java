@@ -9,7 +9,10 @@ import exercise.dto.posts.PostsPage;
 public class PostsController {
 
     public static void listPosts(Context ctx) {
-        String pageStr = ctx.queryParam("page", "1");
+        String pageStr = ctx.queryParam("page");
+        if (pageStr == null || pageStr.isEmpty()) {
+            pageStr = "1";
+        }
         int page = Integer.parseInt(pageStr);
 
         int pageSize = 5;
@@ -27,3 +30,4 @@ public class PostsController {
         ctx.render("posts/show.jte", model("post", post));
     }
 }
+
