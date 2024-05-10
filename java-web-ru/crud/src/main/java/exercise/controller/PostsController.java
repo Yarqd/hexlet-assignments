@@ -9,11 +9,11 @@ import exercise.dto.posts.PostsPage;
 public class PostsController {
 
     public static void listPosts(Context ctx) {
-        int page = 1;
+        int page;
         try {
             page = Integer.parseInt(ctx.queryParam("page", "1"));
         } catch (NumberFormatException e) {
-            page = 1; // Значение по умолчанию, если произошла ошибка преобразования
+            page = 1;
         }
         int pageSize = 5;
         var posts = PostRepository.findAll(page, pageSize);
@@ -31,7 +31,8 @@ public class PostsController {
             throw new NotFoundResponse("Invalid post ID format");
         }
 
-        var post = PostRepository.find(id).orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
+        var post = PostRepository.find(id).orElseThrow(() ->
+                new NotFoundResponse("Entity with id = " + id + " not found"));
         ctx.render("posts/show.jte", model("post", post));
     }
 }
