@@ -1,34 +1,41 @@
 package exercise.controller;
 
-import io.javalin.http.Context;
-import io.javalin.http.NotFoundResponse;
-import static io.javalin.rendering.template.TemplateUtil.model;
-import exercise.repository.PostRepository;
+import java.util.Collections;
+
+import java.util.stream.Collectors;
+
 import exercise.dto.posts.PostsPage;
-import exercise.model.Post;
+import exercise.dto.posts.PostPage;
+import exercise.repository.PostRepository;
+
+import io.javalin.http.Context;
 
 public class PostsController {
 
-    public static void listPosts(Context ctx) {
-        int page = Integer.parseInt(ctx.queryParam("page", "1"));
-        int pageSize = 5;
-        var posts = PostRepository.findAll(page, pageSize);
-        int totalPages = (int) Math.ceil((double) PostRepository.getEntities().size() / pageSize);
-
-        var postsPage = new PostsPage(posts, page, totalPages);
-        ctx.render("posts/index.jte", model("page", postsPage));
-    }
-
-    public static void showPost(Context ctx) {
-        Long id;
-        try {
-            id = Long.parseLong(ctx.pathParam("id"));
-        } catch (NumberFormatException e) {
-            throw new NotFoundResponse("Invalid ID format");
+    // BEGIN
+    public static void show(Context ctx) {
+        var id = ctx.pathParamAsClass("id", Long.class).get();
+        if (PostRepository.find(id).isEmpty()) {
+            ctx.status(404).result("age not found");
+        } else {
+            var post = PostRepository.find(id).get();
+            var page = new PostPage(post);
+            ctx.render("posts/show.jte", Collections.singletonMap("page", page));
         }
-
-        var post = PostRepository.find(id).orElseThrow(() ->
-                new NotFoundResponse("Entity with id = " + id + " not found"));
-        ctx.render("posts/show.jte", model("post", post));
     }
+    public static void index(Context ctx) {
+        var page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+        int per = 5;
+
+        page = page == 0 ? 1 : page;
+        var posts = PostRepository.getEntities()
+                .stream()
+                .skip((long) Math.max(page - 1 , 0) * per)
+                .limit(per)
+                .collect(Collectors.toList());
+
+        var postsPage = new PostsPage(posts, page);
+        ctx.render("posts/index.jte", Collections.singletonMap("page", postsPage));
+    }
+    // END
 }
