@@ -5,16 +5,14 @@ import io.javalin.http.NotFoundResponse;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import exercise.repository.PostRepository;
 import exercise.dto.posts.PostsPage;
+import java.util.Optional;
 
 public class PostsController {
 
     public static void listPosts(Context ctx) {
-        int page;
-        try {
-            page = Integer.parseInt(ctx.queryParam("page", "1"));
-        } catch (NumberFormatException e) {
-            page = 1;
-        }
+        // Получаем номер страницы из параметра запроса и преобразуем его в целое число
+        String pageParam = ctx.queryParam("page");
+        int page = pageParam != null ? Integer.parseInt(pageParam) : 1;
 
         int pageSize = 5;
         var posts = PostRepository.findAll(page, pageSize);
