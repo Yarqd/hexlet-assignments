@@ -1,6 +1,6 @@
 package exercise.controller;
 
-import org.apache.commons.lang3.StringUtils;
+// import org.apache.commons.lang3.StringUtils; // Remove if not used
 import exercise.util.Security;
 import exercise.model.User;
 import exercise.util.NamedRoutes;
@@ -10,14 +10,13 @@ import exercise.dto.users.UserPage;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.http.Context;
 
-
 public class UsersController {
 
     public static void build(Context ctx) throws Exception {
         ctx.render("users/build.jte");
     }
 
-    // BEGIN
+    //BEGIN
     public static void register(Context ctx) {
         String firstName = ctx.formParam("firstName");
         String lastName = ctx.formParam("lastName");
@@ -25,24 +24,22 @@ public class UsersController {
         String password = ctx.formParam("password");
 
         User user = new User(firstName, lastName, email, Security.encryptPassword(password));
-        user.setToken(Security.generateToken());
         UserRepository.save(user);
 
-        ctx.cookie("token", user.getToken());
-
-        ctx.redirect(NamedRoutes.userPath(user.getId().toString()));
+        ctx.cookie("userToken", Security.generateToken());
+        ctx.redirect(NamedRoutes.userPath(user.getId()));
     }
 
     public static void show(Context ctx) {
         Long id = Long.parseLong(ctx.pathParam("id"));
         User user = UserRepository.find(id).orElseThrow(() -> new NotFoundResponse("User not found"));
 
-        String token = ctx.cookie("token");
-        if (token == null || !token.equals(user.getToken())) {
-            ctx.redirect(NamedRoutes.usersBuildPath());
-        } else {
+        String cookieToken = ctx.cookie("userToken");
+        if (cookieToken != null && cookieToken.equals(user.getToken())) {
             ctx.render("users/show.jte", model("page", new UserPage(user)));
+        } else {
+            ctx.redirect(NamedRoutes.buildUserPath());
         }
     }
-    // END
+    //END
 }
