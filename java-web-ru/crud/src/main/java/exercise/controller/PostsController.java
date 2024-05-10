@@ -9,12 +9,9 @@ import exercise.dto.posts.PostsPage;
 public class PostsController {
 
     public static void listPosts(Context ctx) {
-        int page;
-        try {
-            page = Integer.parseInt(ctx.queryParam("page", "1"));
-        } catch (NumberFormatException e) {
-            page = 1;
-        }
+        String pageStr = ctx.queryParam("page", "1");
+        int page = Integer.parseInt(pageStr);
+
         int pageSize = 5;
         var posts = PostRepository.findAll(page, pageSize);
         int totalPages = (int) Math.ceil((double) PostRepository.getEntities().size() / pageSize);
@@ -24,13 +21,7 @@ public class PostsController {
     }
 
     public static void showPost(Context ctx) {
-        Long id;
-        try {
-            id = Long.parseLong(ctx.pathParam("id"));
-        } catch (NumberFormatException e) {
-            throw new NotFoundResponse("Invalid post ID format");
-        }
-
+        Long id = Long.parseLong(ctx.pathParam("id"));
         var post = PostRepository.find(id).orElseThrow(() ->
                 new NotFoundResponse("Entity with id = " + id + " not found"));
         ctx.render("posts/show.jte", model("post", post));
