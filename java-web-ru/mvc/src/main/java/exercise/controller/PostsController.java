@@ -1,6 +1,6 @@
 package exercise.controller;
 
-import static io.javalin.rendering.template.TemplateUtil.model;
+import java.util.Collections;
 import exercise.dto.posts.PostsPage;
 import exercise.dto.posts.PostPage;
 import exercise.model.Post;
@@ -17,18 +17,18 @@ public class PostsController {
 
     public static void build(Context ctx) {
         var page = new BuildPostPage();
-        ctx.render("posts/build.jte", model("page", page));
+        ctx.render("posts/build.jte", Collections.singletonMap("page", page));
     }
 
     public static void create(Context ctx) {
         try {
             var name = ctx.formParamAsClass("name", String.class)
-                .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
-                .get();
+                    .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
+                    .get();
 
             var body = ctx.formParamAsClass("body", String.class)
-                .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
-                .get();
+                    .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
+                    .get();
 
             var post = new Post(name, body);
             PostRepository.save(post);
@@ -38,23 +38,23 @@ public class PostsController {
             var name = ctx.formParam("name");
             var body = ctx.formParam("body");
             var page = new BuildPostPage(name, body, e.getErrors());
-            ctx.render("posts/build.jte", model("page", page)).status(422);
+            ctx.render("posts/build.jte", Collections.singletonMap("page", page)).status(422);
         }
     }
 
     public static void index(Context ctx) {
         var posts = PostRepository.getEntities();
         var postPage = new PostsPage(posts);
-        ctx.render("posts/index.jte", model("page", postPage));
+        ctx.render("posts/index.jte", Collections.singletonMap("page", postPage));
     }
 
     public static void show(Context ctx) {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var post = PostRepository.find(id)
-            .orElseThrow(() -> new NotFoundResponse("Post not found"));
+                .orElseThrow(() -> new NotFoundResponse("Post not found"));
 
         var page = new PostPage(post);
-        ctx.render("posts/show.jte", model("page", page));
+        ctx.render("posts/show.jte", Collections.singletonMap("page", page));
     }
 
     // BEGIN
