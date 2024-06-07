@@ -21,6 +21,8 @@ public class Application {
     private List<User> users = Data.getUsers();
 
     // BEGIN
+    import java.util.stream.Collectors;
+
     @Autowired
     private UserProperties userProperties;
 
