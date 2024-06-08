@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class PeopleController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) // Импортируем @ResponseStatus из org.springframework.web.bind.annotation
     public Person create(@RequestBody Person person) {
         return personRepository.save(person);
     }
