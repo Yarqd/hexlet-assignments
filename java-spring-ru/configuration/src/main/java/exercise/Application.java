@@ -2,13 +2,14 @@ package exercise;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import  org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import exercise.model.User;
 import exercise.component.UserProperties;
@@ -21,15 +22,17 @@ public class Application {
     private List<User> users = Data.getUsers();
 
     // BEGIN
-    import java.util.stream.Collectors;
-
     @Autowired
     private UserProperties userProperties;
 
     @GetMapping("/admins")
     public List<String> getAdmins() {
+        // Получаем список email администраторов из конфигурации
+        List<String> adminEmails = userProperties.getAdmins();
+
+        // Фильтруем пользователей по email и возвращаем отсортированные имена
         return users.stream()
-                .filter(user -> userProperties.getAdmins().contains(user.getEmail()))
+                .filter(user -> adminEmails.contains(user.getEmail()))
                 .map(User::getName)
                 .sorted()
                 .collect(Collectors.toList());
@@ -44,8 +47,8 @@ public class Application {
     @GetMapping("/users/{id}")
     public Optional<User> show(@PathVariable Long id) {
         var user = users.stream()
-            .filter(u -> u.getId() == id)
-            .findFirst();
+                .filter(u -> u.getId() == id)
+                .findFirst();
         return user;
     }
 

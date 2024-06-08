@@ -2,10 +2,10 @@
 # BEGIN
 logging:
   level:
-    root: info
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n%wEx"
-  color: true
+    root: WARN
+  output:
+    ansi:
+      enabled: always
 
 server:
   port: 7070
