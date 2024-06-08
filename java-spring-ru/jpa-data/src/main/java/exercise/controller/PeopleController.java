@@ -2,6 +2,8 @@ package exercise.controller;
 
 import exercise.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,12 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.http.ResponseEntity;
-import java.util.Optional;
 
 import java.util.List;
+import java.util.Optional;
 
 import exercise.model.Person;
 
@@ -27,29 +26,27 @@ public class PeopleController {
 
     @GetMapping(path = "/{id}")
     public Person show(@PathVariable long id) {
-        return personRepository.findById(id).get();
+        return personRepository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
     }
 
     // BEGIN
     @GetMapping
-    public List<Person> getAllPeople() {
+    public List<Person> index() {
         return personRepository.findAll();
     }
 
-    // POST /people – создание новой персоны
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Person createPerson(@RequestBody Person person) {
+    public Person create(@RequestBody Person person) {
         return personRepository.save(person);
     }
 
-    // DELETE /people/{id} – удаление персоны
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
         Optional<Person> person = personRepository.findById(id);
         if (person.isPresent()) {
-            personRepository.delete(person.get());
-            return ResponseEntity.noContent().build();
+            personRepository.deleteById(id);
+            return ResponseEntity.ok().build(); // Возвращаем статус 200
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
