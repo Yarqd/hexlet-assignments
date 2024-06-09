@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
+import exercise.exception.ResourceNotFoundException;
 import java.util.List;
 
 import exercise.model.Product;
 import exercise.repository.ProductRepository;
-import exercise.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/products")
@@ -48,9 +47,11 @@ public class ProductsController {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
 
-        existingProduct.setName(updatedProduct.getName());
+        // Обновляем поля title и price у существующего продукта
+        existingProduct.setTitle(updatedProduct.getTitle());
         existingProduct.setPrice(updatedProduct.getPrice());
 
+        // Сохраняем обновленный продукт
         return productRepository.save(existingProduct);
     }
     // END
