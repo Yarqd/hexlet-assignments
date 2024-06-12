@@ -15,9 +15,10 @@ import exercise.dto.PostDTO;
 import exercise.dto.CommentDTO;
 
 // BEGIN
+import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/posts")
-public class PostController {
+public class PostsController {
 
     @Autowired
     private PostRepository postRepository;
