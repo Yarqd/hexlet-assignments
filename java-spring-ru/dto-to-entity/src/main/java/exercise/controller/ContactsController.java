@@ -36,6 +36,8 @@ public class ContactsController {
         contactDTO.setFirstName(contact.getFirstName());
         contactDTO.setLastName(contact.getLastName());
         contactDTO.setPhone(contact.getPhone());
+        contactDTO.setCreatedAt(contact.getCreatedAt());
+        contactDTO.setUpdatedAt(contact.getUpdatedAt());
 
         return contactDTO;
     }
