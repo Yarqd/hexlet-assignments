@@ -24,21 +24,18 @@ public class ContactsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ContactDTO createContact(@RequestBody ContactCreateDTO contactCreateDTO) {
-        // Преобразование из DTO в сущность Contact
         Contact contact = new Contact();
         contact.setFirstName(contactCreateDTO.getFirstName());
         contact.setLastName(contactCreateDTO.getLastName());
-        contact.setPhoneNumber(contactCreateDTO.getPhoneNumber());
+        contact.setPhone(contactCreateDTO.getPhone());
 
-        // Сохранение сущности в базу данных
         contactRepository.save(contact);
 
-        // Преобразование из сущности Contact в DTO для ответа
         ContactDTO contactDTO = new ContactDTO();
         contactDTO.setId(contact.getId());
         contactDTO.setFirstName(contact.getFirstName());
         contactDTO.setLastName(contact.getLastName());
-        contactDTO.setPhoneNumber(contact.getPhoneNumber());
+        contactDTO.setPhone(contact.getPhone());
 
         return contactDTO;
     }
