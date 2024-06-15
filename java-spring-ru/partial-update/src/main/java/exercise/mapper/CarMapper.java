@@ -6,6 +6,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
+import exercise.dto.CarCreateDTO;
 import exercise.dto.CarUpdateDTO;
 import exercise.dto.CarDTO;
 import exercise.model.Car;
@@ -18,8 +19,13 @@ import exercise.model.Car;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class CarMapper {
-    public abstract CarDTO map(Car model);
 
-    public abstract void update(CarUpdateDTO dto, @MappingTarget Car model);
+    public abstract void update(CarUpdateDTO dto, @MappingTarget Car car);
+
+    @Mapping(target = "id", ignore = true) // Assuming id is managed elsewhere
+    public abstract CarDTO mapToDTO(Car car);
+
+    @Mapping(target = "id", ignore = true) // Assuming id is managed elsewhere
+    public abstract Car mapToEntity(CarCreateDTO dto);
 }
 // END
