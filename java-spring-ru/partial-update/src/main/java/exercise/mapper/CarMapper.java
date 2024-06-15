@@ -20,21 +20,13 @@ import org.mapstruct.MappingTarget;
 )
 public abstract class CarMapper {
 
-    @Mapping(target = "id", ignore = true) // Assuming id is managed elsewhere
+    @Mapping(target = "id", ignore = true)
     public abstract CarDTO mapToDTO(Car car);
 
-    @Mapping(target = "id", ignore = true) // Assuming id is managed elsewhere
+    @Mapping(target = "id", ignore = true)
     public abstract Car mapToEntity(CarCreateDTO dto);
 
-    public void updateCarFromDTO(CarUpdateDTO dto, @MappingTarget Car car) {
-        if (dto.getModel() != null) {
-            car.setModel(dto.getModel());
-        }
-        if (dto.getManufacturer() != null) {
-            car.setManufacturer(dto.getManufacturer());
-        }
-        if (dto.getEnginePower() != null) {
-            car.setEnginePower(dto.getEnginePower());
-        }
-    }
+    @Mapping(target = "id", ignore = true)
+    public abstract void updateCarFromDTO(CarUpdateDTO dto, @MappingTarget Car car);
+
 }

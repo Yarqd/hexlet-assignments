@@ -5,6 +5,7 @@ import exercise.dto.CarDTO;
 import exercise.dto.CarUpdateDTO;
 import exercise.mapper.CarMapper;
 import exercise.model.Car;
+import exercise.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +17,13 @@ import java.util.stream.Collectors;
 public class CarsController {
 
     @Autowired
+    private CarService carService;
+
+    @Autowired
     private CarMapper carMapper;
 
     @GetMapping("/{id}")
     public CarDTO getCar(@PathVariable Long id) {
-        // Assuming carService.getCarById(id) retrieves Car object
         Car car = carService.getCarById(id);
         return carMapper.mapToDTO(car);
     }
