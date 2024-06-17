@@ -10,7 +10,6 @@ import exercise.dto.CarCreateDTO;
 import exercise.dto.CarUpdateDTO;
 import exercise.dto.CarDTO;
 import exercise.model.Car;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 // BEGIN
 @Mapper(
@@ -20,10 +19,8 @@ import org.openapitools.jackson.nullable.JsonNullable;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface CarMapper {
-    CarDTO toCarDTO(Car car);
-
-    Car toCar(CarCreateDTO carCreateDTO);
-
-    void updateCarFromDto(CarUpdateDTO carUpdateDTO, @MappingTarget Car car);
+    CarDTO map(Car car);
+    Car map(CarCreateDTO carCreateDTO);
+    void update(CarUpdateDTO carUpdateDTO, @MappingTarget Car car); // Обновление модели Car на основе CarUpdateDTO
 }
 // END
