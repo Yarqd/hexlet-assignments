@@ -1,32 +1,35 @@
 package exercise.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 import exercise.dto.CarCreateDTO;
 import exercise.dto.CarUpdateDTO;
 import exercise.dto.CarDTO;
 import exercise.model.Car;
-import org.mapstruct.MappingTarget;
 
-@Mapper(
-        uses = { JsonNullableMapper.class },
+// BEGIN
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
-public abstract class CarMapper {
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface CarMapper {
+    CarDTO toCarDTO(Car car);
+    Car toCar(CarCreateDTO carCreateDTO);
 
-    @Mapping(target = "id", ignore = true)
-    public abstract CarDTO mapToDTO(Car car);
-
-    @Mapping(target = "id", ignore = true)
-    public abstract Car mapToEntity(CarCreateDTO dto);
-
-    @Mapping(target = "id", ignore = true)
-    public abstract void updateCarFromDTO(CarUpdateDTO dto, @MappingTarget Car car);
-
+    default void updateCarFromDto(CarUpdateDTO dto, @MappingTarget Car car) {
+        if (dto.getModel() != null && dto.getModel().isPresent()) {
+            car.setModel(dto.getModel().get());
+        }
+        if (dto.getManufacturer() != null && dto.getManufacturer().isPresent()) {
+            car.setManufacturer(dto.getManufacturer().get());
+        }
+        if (dto.getEnginePower() != null && dto.getEnginePower().isPresent()) {
+            car.setEnginePower(dto.getEnginePower().get());
+        }
+    }
 }
+// END
