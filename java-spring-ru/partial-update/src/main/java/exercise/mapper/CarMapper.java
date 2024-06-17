@@ -10,7 +10,6 @@ import exercise.dto.CarCreateDTO;
 import exercise.dto.CarUpdateDTO;
 import exercise.dto.CarDTO;
 import exercise.model.Car;
-import org.mapstruct.Context;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 // BEGIN
@@ -25,21 +24,6 @@ public interface CarMapper {
 
     Car toCar(CarCreateDTO carCreateDTO);
 
-    void updateCarFromDto(CarUpdateDTO carUpdateDTO, @MappingTarget Car car, @Context JsonNullableMapper jsonNullableMapper);
-}
-
-package exercise.mapper;
-
-import org.openapitools.jackson.nullable.JsonNullable;
-
-public class JsonNullableMapper {
-
-    public <T> T unwrap(JsonNullable<T> jsonNullable) {
-        return jsonNullable == null ? null : jsonNullable.orElse(null);
-    }
-
-    public <T> boolean isPresent(JsonNullable<T> jsonNullable) {
-        return jsonNullable != null && jsonNullable.isPresent();
-    }
+    void updateCarFromDto(CarUpdateDTO carUpdateDTO, @MappingTarget Car car);
 }
 // END
