@@ -42,7 +42,7 @@ public class Task {
 
     // BEGIN
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
+    @JoinColumn(name = "assignee_id")
     private User assignee;
     // END
 }
