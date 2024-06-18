@@ -33,57 +33,46 @@ public class TasksController {
     @Autowired
     private TaskMapper taskMapper;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @GetMapping
-    public List<TaskDTO> getAllTasks() {
-        return taskRepository.findAll()
-                .stream()
-                .map(taskMapper::toTaskDTO)
+    @GetMapping("")
+    public List<TaskDTO> index() {
+        var tasks = taskRepository.findAll();
+        return tasks.stream()
+                .map(taskMapper::map)  // Используем метод map для Task -> TaskDTO
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public TaskDTO getTask(@PathVariable Long id) {
+    public TaskDTO show(@PathVariable long id) {
         var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
-        return taskMapper.toTaskDTO(task);
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
+        return taskMapper.map(task);  // Используем метод map для Task -> TaskDTO
     }
 
-    @PostMapping
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDTO createTask(@Valid @RequestBody TaskCreateDTO taskCreateDTO) {
-        var task = taskMapper.toTask(taskCreateDTO);
-        var assignee = userRepository.findById(taskCreateDTO.getAssigneeId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id "
-                        + taskCreateDTO.getAssigneeId()));
-        task.setAssignee(assignee);
+    public TaskDTO create(@Valid @RequestBody TaskCreateDTO taskCreateDTO) {
+        var task = taskMapper.map(taskCreateDTO);  // Используем метод map для TaskCreateDTO -> Task
         taskRepository.save(task);
-        return taskMapper.toTaskDTO(task);
+        return taskMapper.map(task);  // Используем метод map для Task -> TaskDTO
     }
 
     @PutMapping("/{id}")
-    public TaskDTO updateTask(@PathVariable Long id, @Valid @RequestBody TaskUpdateDTO taskUpdateDTO) {
+    public TaskDTO update(@PathVariable long id, @Valid @RequestBody TaskUpdateDTO taskUpdateDTO) {
         var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
-        taskMapper.updateTaskFromDTO(taskUpdateDTO, task);
-        if (taskUpdateDTO.getAssigneeId() != null) {
-            var assignee = userRepository.findById(taskUpdateDTO.getAssigneeId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id "
-                            + taskUpdateDTO.getAssigneeId()));
-            task.setAssignee(assignee);
-        }
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
+
+        taskMapper.update(taskUpdateDTO, task);  // Используем метод update для TaskUpdateDTO -> Task
         taskRepository.save(task);
-        return taskMapper.toTaskDTO(task);
+
+        return taskMapper.map(task);  // Используем метод map для Task -> TaskDTO
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(@PathVariable Long id) {
+    public void delete(@PathVariable long id) {
         var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
         taskRepository.delete(task);
     }
-    // END
+// END
 }
