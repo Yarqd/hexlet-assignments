@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import exercise.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 @RestController
 @RequestMapping("/products")
