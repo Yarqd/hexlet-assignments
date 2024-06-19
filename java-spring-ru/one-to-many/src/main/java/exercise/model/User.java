@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.List;
 
-
+    // BEGIN
 @Entity
-@Table(name = "guests")
+@Table(name = "users")  // Исправим название таблицы на users
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -44,7 +44,6 @@ public class User {
     @CreatedDate
     private LocalDate createdAt;
 
-    // BEGIN
     @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
