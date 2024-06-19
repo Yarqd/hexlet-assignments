@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import exercise.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 @RestController
 @RequestMapping("/products")
@@ -71,7 +70,6 @@ public class ProductsController {
     public ProductDTO updateProduct(@PathVariable Long id, @Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
-
         if (productUpdateDTO.getCategoryId().isPresent()) {
             Long categoryId = productUpdateDTO.getCategoryId().get();
             Category category = categoryRepository.findById(categoryId)
