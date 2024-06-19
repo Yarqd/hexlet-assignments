@@ -6,13 +6,10 @@ import exercise.dto.ProductUpdateDTO;
 import exercise.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.openapitools.jackson.nullable.JsonNullable;
 
-// BEGIN
 @Mapper(
         uses = { ReferenceMapper.class, CategoryMapper.class },
         componentModel = org.mapstruct.MappingConstants.ComponentModel.SPRING,
@@ -31,4 +28,3 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product product);
 }
-// END
