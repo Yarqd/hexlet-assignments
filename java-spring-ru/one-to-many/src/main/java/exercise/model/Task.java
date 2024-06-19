@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "assignees")
+@Table(name = "tasks")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -40,8 +39,8 @@ public class Task {
     @LastModifiedDate
     private LocalDate updatedAt;
 
-    // BEGIN
+    //BEGIN
     @ManyToOne(fetch = FetchType.LAZY)
     private User assignee;
-    // END
+    //END
 }

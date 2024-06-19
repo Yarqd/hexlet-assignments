@@ -23,38 +23,38 @@ import java.time.LocalDate;
 import java.util.List;
 
     // BEGIN
-@Entity
-@Table(name = "users")  // Исправим название таблицы на users
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
-public class User {
+    @Entity
+    @Table(name = "users")
+    @EntityListeners(AuditingEntityListener.class)
+    @Getter
+    @Setter
+    public class User {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private long id;
+        @Id
+        @GeneratedValue(strategy = IDENTITY)
+        private long id;
 
-    @NotBlank
-    private String name;
+        @NotBlank
+        private String name;
 
-    @Email
-    @Column(unique = true)
-    private String email;
+        @Email
+        @Column(unique = true)
+        private String email;
 
-    @CreatedDate
-    private LocalDate createdAt;
+        @CreatedDate
+        private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks = new ArrayList<>();
+        @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<Task> tasks = new ArrayList<>();
 
-    public void addTask(Task task) {
-        tasks.add(task);
-        task.setAssignee(this);
-    }
+        public void addTask(Task task) {
+            tasks.add(task);
+            task.setAssignee(this);
+        }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
-        task.setAssignee(null);
-    }
+        public void removeTask(Task task) {
+            tasks.remove(task);
+            task.setAssignee(null);
+        }
     // END
 }

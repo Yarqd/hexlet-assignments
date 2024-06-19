@@ -1,47 +1,79 @@
-package exercise.model;
+package exercise.controller;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.IDENTITY;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.util.List;
 
-import java.time.LocalDate;
+import exercise.dto.TaskCreateDTO;
+import exercise.dto.TaskDTO;
+import exercise.dto.TaskUpdateDTO;
+import exercise.mapper.TaskMapper;
+import exercise.repository.TaskRepository;
+import exercise.repository.UserRepository;
+import exercise.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
-@Entity
-@Table(name = "tasks")
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
-public class Task {
+@RestController
+@RequestMapping("/tasks")
+public class TasksController {
     //BEGIN
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private long id;
+    @Autowired
+    private TaskRepository taskRepository;
 
-    @NotBlank
-    private String title;
+    @Autowired
+    private UserRepository userRepository;
 
-    @NotBlank
-    private String description;
+    @Autowired
+    private TaskMapper taskMapper;
 
-    @CreatedDate
-    private LocalDate createdAt;
+    @GetMapping("")
+    public List<TaskDTO> index() {
+        var tasks = taskRepository.findAll();
+        return tasks.stream()
+                .map(taskMapper::map)
+                .toList();
+    }
 
-    @LastModifiedDate
-    private LocalDate updatedAt;
+    @GetMapping("/{id}")
+    public TaskDTO show(@PathVariable long id) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        return taskMapper.map(task);
+    }
 
-    // BEGIN
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User assignee;
-    // END
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TaskDTO create(@RequestBody @Valid TaskCreateDTO taskCreateDTO) {
+        var task = taskMapper.map(taskCreateDTO);
+        taskRepository.save(task);
+        return taskMapper.map(task);
+    }
+
+    @PutMapping("/{id}")
+    public TaskDTO update(@PathVariable long id, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+
+        taskMapper.update(taskUpdateDTO, task);
+        taskRepository.save(task);
+
+        return taskMapper.map(task);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroy(@PathVariable long id) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        taskRepository.delete(task);
+    }
 }
