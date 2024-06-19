@@ -1,29 +1,19 @@
 package exercise.controller;
 
-import java.util.List;
-
 import exercise.dto.ProductCreateDTO;
 import exercise.dto.ProductDTO;
 import exercise.dto.ProductUpdateDTO;
+import exercise.exception.ResourceNotFoundException;
 import exercise.mapper.ProductMapper;
 import exercise.model.Product;
-import exercise.model.Category;
 import exercise.repository.CategoryRepository;
 import exercise.repository.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import exercise.exception.ResourceNotFoundException;
-import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -38,77 +28,54 @@ public class ProductsController {
     @Autowired
     private ProductMapper productMapper;
 
-    @GetMapping
-    public List<ProductDTO> getAllProducts() {
-        return productRepository.findAll().stream()
+    @GetMapping("")
+    public List<ProductDTO> index() {
+        var products = productRepository.findAll();
+        return products.stream()
                 .map(productMapper::map)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProductById(@PathVariable Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+    public ProductDTO show(@PathVariable long id) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
         return productMapper.map(product);
     }
 
-    @PostMapping
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDTO createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO) {
-        // BEGIN
-        // Проверка существования категории
-        Category category = categoryRepository.findById(productCreateDTO.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id "
-                        + productCreateDTO.getCategoryId()));
+    public ProductDTO create(@Valid @RequestBody ProductCreateDTO productData) {
+        var category = categoryRepository.findById(productData.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + productData.getCategoryId() + " not found"));
 
-        // Маппинг DTO на сущность Product и установка категории
-        Product product = productMapper.map(productCreateDTO);
+        var product = productMapper.map(productData);
         product.setCategory(category);
-
-        // Сохранение продукта и возврат DTO
-        Product savedProduct = productRepository.save(product);
-        return productMapper.map(savedProduct);
-        // END
+        productRepository.save(product);
+        return productMapper.map(product);
     }
 
     @PutMapping("/{id}")
-    public ProductDTO updateProduct(@PathVariable Long id, @Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
-        // BEGIN
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+    public ProductDTO update(@PathVariable long id, @Valid @RequestBody ProductUpdateDTO productData) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
 
-        // Обработка обновления категории, если она присутствует
-        if (productUpdateDTO.getCategoryId().isPresent()) {
-            Long categoryId = productUpdateDTO.getCategoryId().get();
-            Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + categoryId));
+        if (productData.getCategoryId() != null && productData.getCategoryId().isPresent()) {
+            var category = categoryRepository.findById(productData.getCategoryId().get())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category with id " + productData.getCategoryId().get() + " not found"));
             product.setCategory(category);
         }
 
-        // Обработка обновления названия продукта
-        if (productUpdateDTO.getTitle().isPresent()) {
-            product.setTitle(productUpdateDTO.getTitle().get());
-        }
-
-        // Обработка обновления цены продукта
-        if (productUpdateDTO.getPrice().isPresent()) {
-            product.setPrice(productUpdateDTO.getPrice().get());
-        }
-
-        // Сохранение обновленного продукта и возврат DTO
-        Product updatedProduct = productRepository.save(product);
-        return productMapper.map(updatedProduct);
-        // END
+        productMapper.update(productData, product);
+        productRepository.save(product);
+        return productMapper.map(product);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable Long id) {
-        // BEGIN
-        if (!productRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Product not found with id " + id);
-        }
-        productRepository.deleteById(id);
-        // END
+    public void delete(@PathVariable long id) {
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
+        productRepository.delete(product);
     }
 }

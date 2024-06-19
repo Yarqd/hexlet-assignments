@@ -1,29 +1,26 @@
 package exercise.mapper;
 
-import exercise.dto.ProductCreateDTO;
 import exercise.dto.ProductDTO;
+import exercise.dto.ProductCreateDTO;
 import exercise.dto.ProductUpdateDTO;
 import exercise.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(
-        uses = { ReferenceMapper.class, CategoryMapper.class },
-        componentModel = org.mapstruct.MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(componentModel = "spring", uses = {ReferenceMapper.class, CategoryMapper.class})
 public interface ProductMapper {
 
-    @Mapping(target = "category", source = "categoryId")
-    Product map(ProductCreateDTO dto);
-
-    @Mapping(target = "categoryId", source = "category.id")
-    @Mapping(target = "categoryName", source = "category.name")
+    @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "category.name", target = "categoryName")
     ProductDTO map(Product product);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    Product map(ProductCreateDTO dto);
+
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void update(ProductUpdateDTO dto, @MappingTarget Product product);
 }
