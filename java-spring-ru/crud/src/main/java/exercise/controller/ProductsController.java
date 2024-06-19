@@ -72,13 +72,18 @@ public class ProductsController {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
 
         if (productUpdateDTO.getCategoryId().isPresent()) {
-            productMapper.mapUpdate(productUpdateDTO.getCategoryId(), product, categoryRepository);
+            Long categoryId = productUpdateDTO.getCategoryId().get();
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id " + categoryId));
+            product.setCategory(category);
         }
+
         if (productUpdateDTO.getTitle().isPresent()) {
-            productMapper.mapUpdate(productUpdateDTO.getTitle(), product, "title");
+            product.setTitle(productUpdateDTO.getTitle().get());
         }
+
         if (productUpdateDTO.getPrice().isPresent()) {
-            productMapper.mapUpdate(productUpdateDTO.getPrice(), product, "price");
+            product.setPrice(productUpdateDTO.getPrice().get());
         }
 
         Product updatedProduct = productRepository.save(product);
