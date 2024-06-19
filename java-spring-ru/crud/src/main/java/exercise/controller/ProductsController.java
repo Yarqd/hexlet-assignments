@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import exercise.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 @RestController
 @RequestMapping("/products")
@@ -56,22 +55,29 @@ public class ProductsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO) {
+        // BEGIN
+        // Проверка существования категории
         Category category = categoryRepository.findById(productCreateDTO.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id "
                         + productCreateDTO.getCategoryId()));
 
+        // Маппинг DTO на сущность Product и установка категории
         Product product = productMapper.map(productCreateDTO);
         product.setCategory(category);
 
+        // Сохранение продукта и возврат DTO
         Product savedProduct = productRepository.save(product);
         return productMapper.map(savedProduct);
+        // END
     }
 
     @PutMapping("/{id}")
     public ProductDTO updateProduct(@PathVariable Long id, @Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
+        // BEGIN
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
 
+        // Обработка обновления категории, если она присутствует
         if (productUpdateDTO.getCategoryId().isPresent()) {
             Long categoryId = productUpdateDTO.getCategoryId().get();
             Category category = categoryRepository.findById(categoryId)
@@ -79,24 +85,30 @@ public class ProductsController {
             product.setCategory(category);
         }
 
+        // Обработка обновления названия продукта
         if (productUpdateDTO.getTitle().isPresent()) {
             product.setTitle(productUpdateDTO.getTitle().get());
         }
 
+        // Обработка обновления цены продукта
         if (productUpdateDTO.getPrice().isPresent()) {
             product.setPrice(productUpdateDTO.getPrice().get());
         }
 
+        // Сохранение обновленного продукта и возврат DTO
         Product updatedProduct = productRepository.save(product);
         return productMapper.map(updatedProduct);
+        // END
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
+        // BEGIN
         if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product not found with id " + id);
         }
         productRepository.deleteById(id);
+        // END
     }
 }
