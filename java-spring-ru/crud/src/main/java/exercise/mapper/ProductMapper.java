@@ -7,7 +7,7 @@ import exercise.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 @Mapper(componentModel = "spring", uses = {ReferenceMapper.class, CategoryMapper.class})
 public interface ProductMapper {
@@ -31,7 +31,7 @@ public interface ProductMapper {
         return value.orElse(null);
     }
 
-    default int map(JsonNullable<Integer> value) {
-        return value.orElse(0);
+    default Integer map(JsonNullable<Integer> value) {
+        return value.orElse(null);
     }
 }
