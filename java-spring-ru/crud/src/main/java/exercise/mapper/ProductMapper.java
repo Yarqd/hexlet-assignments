@@ -15,7 +15,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 // BEGIN
 @Mapper(
         uses = { ReferenceMapper.class, CategoryMapper.class },
-        componentModel = MappingConstants.ComponentModel.SPRING,
+        componentModel = org.mapstruct.MappingConstants.ComponentModel.SPRING,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
@@ -30,17 +30,5 @@ public interface ProductMapper {
 
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product product);
-
-    default String map(JsonNullable<String> nullableString) {
-        return nullableString.orElse(null);
-    }
-
-    default Integer map(JsonNullable<Integer> nullableInteger) {
-        return nullableInteger.orElse(null);
-    }
-
-    default Long map(JsonNullable<Long> nullableLong) {
-        return nullableLong.orElse(null);
-    }
 }
 // END
