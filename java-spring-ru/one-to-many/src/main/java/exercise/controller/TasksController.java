@@ -1,25 +1,21 @@
 package exercise.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import exercise.dto.TaskCreateDTO;
 import exercise.dto.TaskDTO;
 import exercise.dto.TaskUpdateDTO;
 import exercise.mapper.TaskMapper;
+import exercise.model.Task;
+import exercise.model.User;
 import exercise.repository.TaskRepository;
 import exercise.repository.UserRepository;
-import exercise.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import exercise.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -35,45 +31,55 @@ public class TasksController {
     @Autowired
     private TaskMapper taskMapper;
 
-    @GetMapping("")
-    public List<TaskDTO> index() {
-        var tasks = taskRepository.findAll();
-        return tasks.stream()
-                .map(taskMapper::map)
-                .toList();
+    // GET /tasks – просмотр списка всех задач
+    @GetMapping
+    public List<TaskDTO> getAllTasks() {
+        return taskRepository.findAll().stream()
+                .map(taskMapper::map) // Используем метод map для преобразования Task в TaskDTO
+                .collect(Collectors.toList());
     }
 
+    // GET /tasks/{id} – просмотр конкретной задачи
     @GetMapping("/{id}")
-    public TaskDTO show(@PathVariable long id) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+    public TaskDTO getTaskById(@PathVariable long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
         return taskMapper.map(task);
     }
 
-    @PostMapping("")
+    // POST /tasks – создание новой задачи
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDTO create(@RequestBody @Valid TaskCreateDTO taskCreateDTO) {
-        var task = taskMapper.map(taskCreateDTO);
-        taskRepository.save(task);
-        return taskMapper.map(task);
+    public TaskDTO createTask(@Valid @RequestBody TaskCreateDTO taskCreateDTO) {
+        User assignee = userRepository.findById(taskCreateDTO.getAssigneeId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + taskCreateDTO.getAssigneeId()));
+        Task task = taskMapper.map(taskCreateDTO);
+        task.setAssignee(assignee);
+        return taskMapper.map(taskRepository.save(task));
     }
 
+    // PUT /tasks/{id} – редактирование задачи
     @PutMapping("/{id}")
-    public TaskDTO update(@PathVariable long id, @RequestBody @Valid TaskUpdateDTO taskUpdateDTO) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+    public TaskDTO updateTask(@PathVariable long id, @Valid @RequestBody TaskUpdateDTO taskUpdateDTO) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
 
+        User assignee = userRepository.findById(taskUpdateDTO.getAssigneeId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + taskUpdateDTO.getAssigneeId()));
+
+        // Используем метод update маппера для обновления Task
         taskMapper.update(taskUpdateDTO, task);
-        taskRepository.save(task);
-
-        return taskMapper.map(task);
+        task.setAssignee(assignee);
+        return taskMapper.map(taskRepository.save(task));
     }
 
+    // DELETE /tasks/{id} – удаление задачи
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable long id) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+    public void deleteTask(@PathVariable long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
         taskRepository.delete(task);
     }
+    //END
 }

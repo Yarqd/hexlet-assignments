@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,8 +40,9 @@ public class Task {
     @LastModifiedDate
     private LocalDate updatedAt;
 
-    //BEGIN
+    // BEGIN
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     private User assignee;
-    //END
+    // END
 }
