@@ -7,6 +7,6 @@
 <body>
 <h1>${page.post.getTitle()}</h1>
 <p>${page.post.getContent()}</p>
-<a href="${@NamedRoutes::postsPath()}">Back to posts</a>
+<a href="/posts">Back to posts</a>
 </body>
 </html>
