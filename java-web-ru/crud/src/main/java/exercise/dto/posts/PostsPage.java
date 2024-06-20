@@ -8,12 +8,11 @@ import lombok.Getter;
 
 
 // BEGIN
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class PostsPage {
     private List<Post> posts;
     private int currentPage;
-    private long totalPosts;
 }
 // END
 

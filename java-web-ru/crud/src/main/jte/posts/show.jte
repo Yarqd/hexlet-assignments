@@ -1,29 +1,12 @@
-@import exercise.dto.posts.PostPage
-@import exercise.util.NamedRoutes
-@param PostPage page
-
-@template.layout.page(
-content = @`
-    <div class="mx-auto p-4 py-md-5">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="${NamedRoutes.postsPath()}">Все посты</a>
-            </li>
-        </ul>
-
-        <br>
-
-        <h3>Пост ${page.getPost().getId()}</h3>
-        <table class="container">
-            <tr>
-                <th>name</th>
-                <th>body</th>
-            </tr>
-            <tr>
-                <td>${page.getPost().getName()}</td>
-                <td>${page.getPost().getBody()}</td>
-            </tr>
-        </table>
-    </div>
-`
-)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>${page.post.getTitle()}</title>
+</head>
+<body>
+<h1>${page.post.getTitle()}</h1>
+<p>${page.post.getContent()}</p>
+<a href="${@NamedRoutes::postsPath()}">Back to posts</a>
+</body>
+</html>
