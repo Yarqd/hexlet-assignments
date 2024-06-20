@@ -7,6 +7,8 @@ import exercise.dto.posts.PostPage;
 import exercise.repository.PostRepository;
 import exercise.model.Post;
 
+import java.util.List;
+
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 
