@@ -2,6 +2,7 @@ package exercise;
 
 import io.javalin.Javalin;
 import java.util.List;
+import exercise.Data;
 
 public final class App {
 
