@@ -20,6 +20,7 @@ public final class App {
             List<String> domains = Data.getDomains();
             ctx.json(domains);
         });
+        return app;
             // END
     }
 
