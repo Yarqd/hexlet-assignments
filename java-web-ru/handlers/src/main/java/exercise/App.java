@@ -14,10 +14,11 @@ public final class App {
             List<String> obj = Data.getPhones();
             ctx.json(obj);
         });
-        app.get("domains", ctx -> {
+        app.get("/domains", ctx -> {
             List<String> obj1 = Data.getDomains();
             ctx.json(obj1);
-        });        // END
+        });
+        // END
     }
 
     public static void main(String[] args) {
