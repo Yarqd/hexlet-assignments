@@ -1,28 +1,17 @@
 package exercise;
 
 import io.javalin.Javalin;
-import java.util.List;
 
 public final class App {
 
     public static Javalin getApp() {
 
         // BEGIN
-        var app = Javalin.create();
-        // Передаем обработчик запроса
-        app.get("/phones", ctx -> {
-            List<String> res = Data.getPhones();
-            ctx.contentType("application/json");
-            ctx.json(res);
+        var app = Javalin.create(config -> {
+            config.bundledPlugins.enableDevLogging();
         });
-
-        app.get("/domains", ctx -> {
-            List<String> domains = Data.getDomains();
-            ctx.contentType("application/json");
-            ctx.json(domains);
-        });
-
-        return app;
+        app.get("/phones", ctx -> ctx.json(List<String> phones = Data.getPhones()));
+        app.get("/domains", ctx -> ctx.json(List<String> domains = Data.getDomains()));
         // END
     }
 
