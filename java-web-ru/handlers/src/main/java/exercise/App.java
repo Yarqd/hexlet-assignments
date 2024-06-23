@@ -10,9 +10,15 @@ public final class App {
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
         });
-        app.get("/phones", ctx -> ctx.result(List<String> phones = Data.getPhones()));
-        app.get("/domains", ctx -> ctx.result(List<String> domains = Data.getDomains()));
-        // END
+        app.get("/phones", ctx -> {
+            List<String> phones = Data.getPhones();
+            ctx.json(phones);
+        });
+        app.get("/domains", ctx -> {
+            List<String> domains = Data.getDomains();
+            ctx.json(domains);
+        });
+            // END
     }
 
     public static void main(String[] args) {
