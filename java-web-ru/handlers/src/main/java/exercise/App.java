@@ -12,11 +12,11 @@ public final class App {
         });
         app.get("/phones", ctx -> {
             List<String> obj = Data.getPhones();
-            ctx.json(obj)
+            ctx.json(obj);
         });
         app.get("domains", ctx -> {
             List<String> obj1 = Data.getDomains();
-            ctx.json(obj1)
+            ctx.json(obj1);
         });        // END
     }
 
