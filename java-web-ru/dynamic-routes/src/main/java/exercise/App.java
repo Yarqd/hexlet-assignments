@@ -28,7 +28,7 @@ public final class App {
                     .ifPresentOrElse(
                             ctx::json, // Если компания найдена, возвращаем ее в формате JSON
                             () -> {
-                                throw new NotFoundResponse("Company not found.");
+                                throw new NotFoundResponse("Company not found");
                             } // Если компания не найдена, выбрасываем исключение
                     );
         });
