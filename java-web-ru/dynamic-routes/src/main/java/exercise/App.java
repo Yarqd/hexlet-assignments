@@ -20,13 +20,17 @@ public final class App {
 
         // BEGIN
         app.get("/companies/{id}", ctx -> {
-            String id = ctx.pathParam("id");
-            Map<String, String> company = COMPANIES.stream()
-                    .filter(c -> c.get("id").equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new NotFoundResponse("Company not found"));
+            var id = ctx.pathParam("id"); // Извлекаем id как строку
 
-            ctx.json(company);
+            COMPANIES.stream()
+                    .filter(comp -> comp.get("id").equals(id)) // Используем извлеченный id для фильтрации
+                    .findFirst()
+                    .ifPresentOrElse(
+                            ctx::json, // Если компания найдена, возвращаем ее в формате JSON
+                            () -> {
+                                throw new NotFoundResponse("Company not found.");
+                            } // Если компания не найдена, выбрасываем исключение
+                    );
         });
         // END
 
