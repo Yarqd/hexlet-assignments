@@ -23,16 +23,23 @@ public final class App {
 
         // BEGIN
         app.get("/users", ctx -> {
-            ctx.render("users/index.jte", model("usersPage", new UsersPage(USERS)));
-        });
+            var page = new UserPage(USERS);
+                    ctx.render("users/index.jte", model("page", page));
+                });
+
         app.get("/users/{id}", ctx -> {
-            String idStr = ctx.pathParam("id");
-            long id = Long.parseLong(idStr); // Преобразование строки в long
-            User user = USERS.stream()
-                    .filter(u -> u.getId() == id) // Теперь сравнение идет между двумя long
+            var id = Integer.parseInt(ctx.pathParam("id"));
+            var user = USERS.stream()
+                    .filter(u -> u.getId() == id)
                     .findFirst()
-                    .orElseThrow(() -> new NotFoundResponse("User not found"));
-            ctx.render("users/show.jte", model("userPage", new UserPage(user))); // Измените здесь ключ с "user" на "userPage"
+                    .orElseThrow(() -> new io.javalin.http.NotFoundResponse("User not found"));
+            var page = new UserPage(user);
+            ctx.render("users/show.jte", model("page", page));
+        });
+
+        app.exception(NotFoundResponse.class, (e, ctx) -> {
+            ctx.status(404);
+            ctx.result(e.getMessage());
         });
         // END
 

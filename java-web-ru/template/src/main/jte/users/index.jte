@@ -1,50 +1,39 @@
-@import exercise.model.User
 @import exercise.dto.users.UsersPage
-@param UsersPage usersPage
+@param UsersPage page
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>List of Users</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Список пользователей</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Users</h1>
-    @if(usersPage == null || usersPage.getUsers() == null || usersPage.getUsers().isEmpty())
-        <p>There are no users available at the moment.</p>
-    @else
-        <table>
+<div class="col-lg-8 mx-auto p-4 py-md-5">
+    <main>
+        <h1>Список пользователей</h1>
+        <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Action</th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Действие</th>
+            </tr>
             </thead>
             <tbody>
-                @for(User user : usersPage.getUsers())
-                    <tr>
-                        <td>${user.getId()}</td>
-                        <td>${user.getFirstName()} ${user.getLastName()}</td>
-                        <td><a href="/users/${user.getId()}">View Details</a></td>
-                    </tr>
-                @endfor
+            @for (var user : page.getUsers())
+                <tr>
+                    <td>${user.getId()}</td>
+                    <td>${user.getFirstName()} ${user.getLastName()}</td>
+                    <td>${user.getEmail()}</td>
+                    <td><a href="/users/${user.getId()}">Просмотр</a></td>
+                </tr>
+            @endfor
             </tbody>
         </table>
-    @endif
+    </main>
+</div>
 </body>
 </html>
