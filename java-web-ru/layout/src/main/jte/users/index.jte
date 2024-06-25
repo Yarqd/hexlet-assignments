@@ -1,6 +1,28 @@
+@import exercise.dto.users.UsersPage
+@param UsersPage page
+
 @template.layout.page(
 content = @`
-    <h1>Welcome to My Website!</h1>
-    <p>This is the home page.</p>
+    <h1>Список пользователей</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (var user : page.getUsers())
+            <tr>
+                <td>${user.getId()}</td>
+                <td>${user.getFirstName()} ${user.getLastName()}</td>
+                <td>${user.getEmail()}</td>
+                <td><a href="/users/${user.getId()}">Просмотр</a></td>
+            </tr>
+        @endfor
+        </tbody>
+    </table>
 `
 )
