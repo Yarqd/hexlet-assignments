@@ -2,7 +2,6 @@
 @param UsersPage page
 
 <!doctype html>
-<html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -19,18 +18,18 @@
             <button class="btn btn-primary" type="submit">Искать</button>
         </div>
     </form>
-@if(page.getUsers().isEmpty())
-    <p>Совпадений не найдено.</p>
-@else
-    <div class="list-group">
-        @for(var user : page.getUsers())
-            <div class="list-group-item">
-                <h5>${user.getFirstName()} ${user.getLastName()}</h5>
-                <p>${user.getEmail()}</p>
-            </div>
-        @endfor
-    </div>
-@endif
-    </div>
+    @if(page.getUsers().isEmpty())
+        <p>Совпадений не найдено.</p>
+    @else
+        <div class="list-group">
+            @for(var user : page.getUsers())
+                <div class="list-group-item">
+                    <h5>${user.getFirstName()} ${user.getLastName()}</h5>
+                    <p>${user.getEmail()}</p>
+                </div>
+            @endfor
+        </div>
+    @endif
+</div>
 </body>
 </html>
