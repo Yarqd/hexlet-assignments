@@ -6,11 +6,12 @@ import exercise.model.User;
 import exercise.dto.users.UsersPage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
-import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 
 public final class App {
 
+    // Каждый пользователь представлен объектом класса User
     private static final List<User> USERS = Data.getUsers();
 
     public static Javalin getApp() {
@@ -20,17 +21,29 @@ public final class App {
             config.fileRenderer(new JavalinJte());
         });
 
+        // BEGIN
         app.get("/users", ctx -> {
-            String term = ctx.queryParam("term"); // Получаем параметр запроса
-            if (term == null) {
-                term = ""; // Устанавливаем значение по умолчанию, если параметр не задан
+            var term = ctx.queryParam("term");
+            List<User> users;
+            if (term != null && !term.isEmpty()) {
+                users = filterUsersByTerm(term);
+            } else {
+                users = USERS;
             }
-            final String finalTerm = term; // Финализируем переменную для использования в лямбда
-            List<User> filteredUsers = USERS.stream()
-                    .filter(user -> StringUtils.startsWithIgnoreCase(user.getFirstName(), finalTerm))
-                    .collect(Collectors.toList());
-            ctx.render("users/index.jte", model("page", new UsersPage(filteredUsers, term)));
+            var page = new UsersPage(users, term);
+            ctx.render("users/index.jte", model("page", page));
         });
+
+        private static List<User> filterUsersByTerm(String term) {
+            List<User> filteredUsers = new ArrayList<>();
+            for (Users user : USERS) {
+                if (user.getFirstName().toLowerCase().startsWith(term.toLowerCase())) {
+                    filteredUsers.add(user);
+                }
+            }
+            return filteredUsers;
+        }
+        // END
 
         app.get("/", ctx -> {
             ctx.render("index.jte");
