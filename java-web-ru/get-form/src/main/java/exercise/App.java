@@ -26,8 +26,8 @@ public final class App {
             List<User> users = new ArrayList<>(USERS);
 
             if (term != null && !term.isEmpty()) {
-                term = term.toLowerCase();
-                users.removeIf(user -> !user.getFirstName().toLowerCase().startsWith(term));
+                String finalTerm = term.toLowerCase();
+                users.removeIf(user -> !user.getFirstName().toLowerCase().startsWith(finalTerm));
             }
 
             var page = new UsersPage(users, term);
