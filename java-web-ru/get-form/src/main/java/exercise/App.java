@@ -36,7 +36,7 @@ public final class App {
 
         private static List<User> filterUsersByTerm(String term) {
             List<User> filteredUsers = new ArrayList<>();
-            for (Users user : USERS) {
+            for (User user : USERS) {
                 if (user.getFirstName().toLowerCase().startsWith(term.toLowerCase())) {
                     filteredUsers.add(user);
                 }
