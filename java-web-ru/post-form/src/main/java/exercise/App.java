@@ -35,13 +35,13 @@ public final class App {
         });
 
         app.post("/users", ctx -> {
-            var firstName = ctx.formParam("firstName").trim();
-            var lastName = ctx.formParam("lastName").trim().toLowerCase();
+            var firstName = StringUtils.capitalize(ctx.formParam("firstName").trim().toLowerCase());
+            var lastName = StringUtils.capitalize(ctx.formParam("lastName").trim().toLowerCase());
             var email = ctx.formParam("email").trim().toLowerCase();
-            var password = ctx.formParam("password");
-            password = password.substring(0, 1).toUpperCase() + password.substring(1).toLowerCase();
+            var password = ctx.formParam("password").trim();
+            password = Security.encrypt(password);
 
-            var user = new User(firstName, lastName, email, Security.encrypt(password));
+            var user = new User(firstName, lastName, email, password);
             UserRepository.save(user);
             ctx.redirect("/users");
         });
