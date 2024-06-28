@@ -30,21 +30,20 @@ public final class App {
         });
 
         // BEGIN
-        // GET /users/build
         app.get("/users/build", ctx -> {
             ctx.render("users/build.jte");
         });
 
-// POST /users
         app.post("/users", ctx -> {
-            String firstName = StringUtils.capitalize(ctx.formParam("firstName"));
-            String lastName = StringUtils.capitalize(ctx.formParam("lastName"));
-            String email = StringUtils.trimToEmpty(ctx.formParam("email")).toLowerCase();
-            String password = Security.encrypt(ctx.formParam("password"));
+            var firstName = ctx.formParam("firstName").trim();
+            var lastName = ctx.formParam("lastName").trim().toLowerCase();
+            var email = ctx.formParam("email").trim().toLowerCase();
+            var password = ctx.formParam("password");
+            password = password.substring(0, 1).toUpperCase() + password.substring(1).toLowerCase();
 
-            User newUser = new User(firstName, lastName, email, password);
-            UserRepository.save(newUser);
-            ctx.redirect("/users");  // Перенаправление на страницу пользователей после сохранения
+            var user = new User(firstName, lastName, email, password);
+            UserRepository.save(user);
+            ctx.redirect("/users");
         });
         // END
 
