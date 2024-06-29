@@ -1,14 +1,15 @@
 package exercise;
 
 import io.javalin.Javalin;
+import io.javalin.validation.ValidationException;
+import io.javalin.validation.ValidationError;
 import java.util.List;
+import java.util.Map;
 import exercise.model.Article;
 import exercise.dto.articles.ArticlesPage;
 import exercise.dto.articles.BuildArticlePage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
-import java.util.Map;
-
 import exercise.repository.ArticleRepository;
 
 public final class App {
@@ -32,37 +33,33 @@ public final class App {
 
         // BEGIN
         app.get("/articles/build", ctx -> {
-            ctx.render("articles/build.jte", model("page", new BuildArticlePage("", "", null)));
+            var page = new BuildArticlePage();
+            ctx.render("articles/build.jte", model("page", page));
         });
 
         app.post("/articles", ctx -> {
-            String title = ctx.formParam("title");
-            String content = ctx.formParam("content");
+            var title = ctx.formParam("title").trim();
+            var content = ctx.formParam("content").trim();
 
-            if (title.length() < 2) {
+            try {
+                if (title.length() < 2) {
+                    throw new ValidationException(Map.of("title", List.of(new ValidationError<>("Название статьи должно быть не короче 2 символов"))));
+                }
+                if (content.length() < 10) {
+                    throw new ValidationException(Map.of("content", List.of(new ValidationError<>("Содержимое статьи должно быть не короче 10 символов"))));
+                }
+                if (ArticleRepository.findByTitle(title).isPresent()) {
+                    throw new ValidationException(Map.of("title", List.of(new ValidationError<>("Статья с таким названием уже существует"))));
+                }
+
+                var article = new Article(title, content);
+                ArticleRepository.save(article);
+                ctx.redirect("/articles");
+            } catch (ValidationException e) {
+                var page = new BuildArticlePage(title, content, e.getErrors());
                 ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of(
-                        "title", List.of("Название не должно быть короче двух символов")))));
-                return;
+                ctx.render("articles/build.jte", model("page", page));
             }
-
-            if (content.length() < 10) {
-                ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of(
-                        "content", List.of("Статья должна быть не короче 10 символов")))));
-                return;
-            }
-
-            if (ArticleRepository.existsByTitle(title)) {
-                ctx.status(422);
-                ctx.render("articles/build.jte", model("page", new BuildArticlePage(title, content, Map.of(
-                        "title", List.of("Статья с таким названием уже существует")))));
-                return;
-            }
-
-            Article article = new Article(title, content);
-            ArticleRepository.save(article);
-            ctx.redirect("/articles");
         });
         // END
 
