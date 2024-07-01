@@ -14,9 +14,9 @@
     <h1>Создание статьи</h1>
 
     @if(page.getErrors() != null)
-        <ul class="list-group">
-            @for(var validator : page.getErrors().values())
-                @for(var error : validator)
+        <ul class="list-group mb-3">
+            @for(var errorList : page.getErrors().values())
+                @for(var error : errorList)
                     <li class="list-group-item list-group-item-danger">${error.getMessage()}</li>
                 @endfor
             @endfor

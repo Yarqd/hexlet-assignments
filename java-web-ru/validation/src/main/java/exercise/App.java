@@ -2,7 +2,6 @@ package exercise;
 
 import io.javalin.Javalin;
 import io.javalin.validation.ValidationException;
-import io.javalin.validation.ValidationError;
 import java.util.List;
 import java.util.Map;
 import exercise.model.Article;
@@ -10,6 +9,7 @@ import exercise.dto.articles.ArticlesPage;
 import exercise.dto.articles.BuildArticlePage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
+import io.javalin.validation.ValidationError;
 import exercise.repository.ArticleRepository;
 
 public final class App {
@@ -51,7 +51,6 @@ public final class App {
                 if (ArticleRepository.findByTitle(title).isPresent()) {
                     throw new ValidationException(Map.of("title", List.of(new ValidationError<>("Статья с таким названием уже существует"))));
                 }
-
                 var article = new Article(title, content);
                 ArticleRepository.save(article);
                 ctx.redirect("/articles");
