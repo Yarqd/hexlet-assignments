@@ -3,13 +3,12 @@ package exercise;
 import io.javalin.Javalin;
 import io.javalin.validation.ValidationException;
 import java.util.List;
-import java.util.Map;
 import exercise.model.Article;
 import exercise.dto.articles.ArticlesPage;
 import exercise.dto.articles.BuildArticlePage;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import io.javalin.rendering.template.JavalinJte;
-import io.javalin.validation.ValidationError;
+
 import exercise.repository.ArticleRepository;
 
 public final class App {
@@ -33,25 +32,23 @@ public final class App {
 
         // BEGIN
         app.get("/articles/build", ctx -> {
-            var page = new BuildArticlePage();
+            var page = new BuildArticlePage(null, null, null);
             ctx.render("articles/build.jte", model("page", page));
         });
 
         app.post("/articles", ctx -> {
-            var title = ctx.formParam("title").trim();
-            var content = ctx.formParam("content").trim();
+            var title = ctx.formParam("title");
+            var content = ctx.formParam("content");
 
             try {
-                if (title.length() < 2) {
-                    throw new ValidationException(Map.of("title", List.of(new ValidationError<>("Название статьи должно быть не короче 2 символов"))));
-                }
-                if (content.length() < 10) {
-                    throw new ValidationException(Map.of("content", List.of(new ValidationError<>("Содержимое статьи должно быть не короче 10 символов"))));
-                }
-                if (ArticleRepository.findByTitle(title).isPresent()) {
-                    throw new ValidationException(Map.of("title", List.of(new ValidationError<>("Статья с таким названием уже существует"))));
-                }
-                var article = new Article(title, content);
+                var validatedTitle = ctx.formParamAsClass("title", String.class)
+                        .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
+                        .check(value -> !ArticleRepository.existsByTitle(value), "Статья с таким названием уже существует")
+                        .get();
+                var validatedContent = ctx.formParamAsClass("content", String.class)
+                        .check(value -> value.length() >= 10, "Статья должна быть не короче 10 символов")
+                        .get();
+                var article = new Article(validatedTitle, validatedContent);
                 ArticleRepository.save(article);
                 ctx.redirect("/articles");
             } catch (ValidationException e) {
