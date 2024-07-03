@@ -1,6 +1,6 @@
 package exercise.controller;
 
-import java.util.Collections;
+import static io.javalin.rendering.template.TemplateUtil.model;
 import exercise.dto.posts.PostsPage;
 import exercise.dto.posts.PostPage;
 import exercise.model.Post;
@@ -13,22 +13,27 @@ import io.javalin.http.Context;
 import io.javalin.validation.ValidationException;
 import io.javalin.http.NotFoundResponse;
 
+import java.util.Collections;
+import io.javalin.validation.ValidationError;
+import java.util.Map;
+import java.util.List;
+
 public class PostsController {
 
     public static void build(Context ctx) {
         var page = new BuildPostPage();
-        ctx.render("posts/build.jte", Collections.singletonMap("page", page));
+        ctx.render("posts/build.jte", model("page", page));
     }
 
     public static void create(Context ctx) {
         try {
             var name = ctx.formParamAsClass("name", String.class)
-                    .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
-                    .get();
+                .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
+                .get();
 
             var body = ctx.formParamAsClass("body", String.class)
-                    .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
-                    .get();
+                .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
+                .get();
 
             var post = new Post(name, body);
             PostRepository.save(post);
@@ -38,58 +43,59 @@ public class PostsController {
             var name = ctx.formParam("name");
             var body = ctx.formParam("body");
             var page = new BuildPostPage(name, body, e.getErrors());
-            ctx.render("posts/build.jte", Collections.singletonMap("page", page)).status(422);
+            ctx.render("posts/build.jte", model("page", page)).status(422);
         }
     }
 
     public static void index(Context ctx) {
         var posts = PostRepository.getEntities();
         var postPage = new PostsPage(posts);
-        ctx.render("posts/index.jte", Collections.singletonMap("page", postPage));
+        ctx.render("posts/index.jte", model("page", postPage));
     }
 
     public static void show(Context ctx) {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var post = PostRepository.find(id)
-                .orElseThrow(() -> new NotFoundResponse("Post not found"));
+            .orElseThrow(() -> new NotFoundResponse("Post not found"));
 
         var page = new PostPage(post);
-        ctx.render("posts/show.jte", Collections.singletonMap("page", page));
+        ctx.render("posts/show.jte", model("page", page));
     }
 
     // BEGIN
     public static void edit(Context ctx) {
         var id = ctx.pathParamAsClass("id", Long.class).get();
-        var post = PostRepository.find(id).orElseThrow(() -> new NotFoundResponse("Post not found"));
-
-        var page = new EditPostPage(post.getId(), post.getName(), post.getBody(), null);
-        ctx.render("posts/edit.jte", Collections.singletonMap("page", page));
+        var post = PostRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Post not found"));
+        var page = new EditPostPage(post, Collections.emptyMap());
+        ctx.render("posts/edit.jte", model("page", page));
     }
 
     public static void update(Context ctx) {
         var id = ctx.pathParamAsClass("id", Long.class).get();
-        var post = PostRepository.find(id).orElseThrow(() -> new NotFoundResponse("Post not found"));
+        var name = ctx.formParam("name");
+        var body = ctx.formParam("body");
 
         try {
-            var name = ctx.formParamAsClass("name", String.class)
+            var checkedName = ctx.formParamAsClass("name", String.class)
                     .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
                     .get();
-
-            var body = ctx.formParamAsClass("body", String.class)
+            var checkedBody = ctx.formParamAsClass("body", String.class)
                     .check(value -> value.length() >= 10, "Пост должен быть не короче 10 символов")
                     .get();
 
-            post.setName(name);
-            post.setBody(body);
+            var post = PostRepository.find(id)
+                    .orElseThrow(() -> new NotFoundResponse("Post not found"));
 
-            PostRepository.update(post);
+            post.setName(checkedName);
+            post.setBody(checkedBody);
+            PostRepository.save(post);
             ctx.redirect(NamedRoutes.postsPath());
-
         } catch (ValidationException e) {
-            var name = ctx.formParam("name");
-            var body = ctx.formParam("body");
-            var page = new EditPostPage(post.getId(), name, body, e.getErrors());
-            ctx.render("posts/edit.jte", Collections.singletonMap("page", page)).status(422);
+            Map<String, List<ValidationError<?>>> errors = (Map<String, List<ValidationError<?>>>) (Map<?, ?>) e.getErrors();
+            var post = new Post(id, name, body);
+            var page = new EditPostPage(post, errors);
+            ctx.render("posts/edit.jte", model("page", page)).status(422);
         }
     }
     // END

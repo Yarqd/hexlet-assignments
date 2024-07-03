@@ -4,13 +4,15 @@ import io.javalin.Javalin;
 import exercise.controller.PostsController;
 import exercise.controller.RootController;
 import exercise.util.NamedRoutes;
+import io.javalin.rendering.template.JavalinJte;
 
 public final class App {
 
     public static Javalin getApp() {
 
         var app = Javalin.create(config -> {
-            config.plugins.enableDevLogging();
+            config.bundledPlugins.enableDevLogging();
+            config.fileRenderer(new JavalinJte());
         });
 
         app.get(NamedRoutes.rootPath(), RootController::index);
@@ -22,8 +24,7 @@ public final class App {
         app.get(NamedRoutes.postPath("{id}"), PostsController::show);
 
         // BEGIN
-        app.get(NamedRoutes.editPostPath("{id}"), PostsController::edit);
-        app.post(NamedRoutes.postPath("{id}"), PostsController::update);
+        
         // END
 
         return app;

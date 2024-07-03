@@ -5,16 +5,16 @@ import java.util.Map;
 import io.javalin.validation.ValidationError;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 // BEGIN
-@Getter
-@Setter
+import exercise.model.Post;
+
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class EditPostPage {
-    private Long id;
-    private String name;
-    private String body;
-    private Map<String, List<ValidationError<Object>>> errors;
+    private Post post;
+    private Map<String, List<ValidationError<?>>> errors;
 }
 // END

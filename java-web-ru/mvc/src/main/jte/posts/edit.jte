@@ -1,41 +1,29 @@
 @import exercise.dto.posts.EditPostPage
-@import exercise.util.NamedRoutes
 @param EditPostPage page
 
 @template.layout.page(
 content = @`
-    <div align="left">
-        @if(page.getErrors() != null)
-            <div class="mb-3">
-                <ul>
-                    @for(var validator : page.getErrors().values())
-                        @for(var error : validator)
-                            <li>${error.getMessage()}</li>
-                        @endfor
-                    @endfor
-                </ul>
-            </div>
-        @endif
-    </div>
-
-    <div class="mx-auto p-4 py-md-5">
-        <form action="${NamedRoutes.postPath(page.getId())}" method="post">
-            <div class="mb-3">
-                <label class="form-label">
-                    <p>Название</p>
-                    <input type="text" class="form-control" name="name" value="${page.getName()}" />
-                </label>
-            </div>
-            <br>
-            <div>
-                <label class="form-label">
-                    <p>Содержание</p>
-                    <textarea class="form-control" name="body">${page.getBody()}</textarea>
-                </label>
-            </div>
-            <br>
-            <input type="submit" class="btn btn-primary" value="Обновить" />
-        </form>
-    </div>
+    <h1>Редактирование поста</h1>
+    <form action="${exercise.util.NamedRoutes.updatePostPath(page.getPost().getId())}" method="post">
+        <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="text" class="form-control" id="name" name="name" value="${page.getPost().getName()}">
+            @if(page.getErrors().containsKey("name"))
+                @for(var error : page.getErrors().get("name"))
+                    <div class="text-danger">${error.getMessage()}</div>
+                @endfor
+            @endif
+        </div>
+        <div class="form-group">
+            <label for="body">Тело</label>
+            <textarea class="form-control" id="body" name="body">${page.getPost().getBody()}</textarea>
+            @if(page.getErrors().containsKey("body"))
+                @for(var error : page.getErrors().get("body"))
+                    <div class="text-danger">${error.getMessage()}</div>
+                @endfor
+            @endif
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
 `
 )
