@@ -13,7 +13,7 @@
                 ${page.getPost().getBody()}
             </div>
             <!-- BEGIN -->
-            
+            <a href="${exercise.util.NamedRoutes.editPostPath(page.getPost().getId())}">Edit</a>
             <!-- END -->
         </main>
     `
