@@ -15,6 +15,8 @@ public final class App {
         });
 
         // BEGIN
+        app.get(NamedRoutes.rootPath(), ctx -> ctx.result("Welcome to the user management system"));
+        app.get(NamedRoutes.buildUserPath(), UsersController::build);
         app.post(NamedRoutes.usersPath(), UsersController::create);
         // END
 
