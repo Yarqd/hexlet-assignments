@@ -4,7 +4,7 @@
 @template.layout.page(
 content = @`
     <h1>${page.getPost().getName()}</h1>
-    <p>${page.getPost().getContent()}</p>
+    <p>${page.getPost().getBody()}</p>
     <a href="${exercise.util.NamedRoutes.postsPath()}" class="btn btn-primary">Назад к постам</a>
 `
 )
