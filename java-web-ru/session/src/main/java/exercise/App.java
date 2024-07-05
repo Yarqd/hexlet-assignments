@@ -4,8 +4,8 @@ import io.javalin.Javalin;
 import exercise.controller.SessionsController;
 import exercise.util.NamedRoutes;
 import io.javalin.rendering.template.JavalinJte;
-
 import static io.javalin.rendering.template.TemplateUtil.model;
+import exercise.dto.MainPage;
 
 public final class App {
 
@@ -17,15 +17,15 @@ public final class App {
         });
 
         // BEGIN
-        app.get(NamedRoutes.rootPath(), ctx -> {
-            String currentUser = (String) ctx.sessionAttribute("currentUser");
-            var page = new exercise.dto.MainPage(currentUser);
-            ctx.render("index.jte", model("page", page));
-        });
-
         app.get(NamedRoutes.buildSessionPath(), SessionsController::build);
         app.post(NamedRoutes.loginPath(), SessionsController::create);
         app.post(NamedRoutes.logoutPath(), SessionsController::destroy);
+
+        app.get(NamedRoutes.rootPath(), ctx -> {
+            var currentUser = ctx.sessionAttribute("currentUser");
+            var page = new MainPage(currentUser != null ? currentUser.toString() : null);
+            ctx.render("index.jte", model("page", page));
+        });
         // END
 
         return app;

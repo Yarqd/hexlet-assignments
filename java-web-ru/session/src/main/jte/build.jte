@@ -1,34 +1,24 @@
+@import exercise.util.NamedRoutes
 @import exercise.dto.LoginPage
 @param LoginPage page
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-          crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
 <h1>Login</h1>
-<form action="@{exercise.util.NamedRoutes.loginPath()}" method="post">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="${page.getName()}" required>
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-    @if (page.getError() != null) {
+@if(page.getError() != null && !page.getError().isEmpty())
     <p style="color: red;">${page.getError()}</p>
-    }
+@endif
+<form action="${NamedRoutes.loginPath()}" method="post">
+    <input type="text" name="nickname" placeholder="Nickname" value="${page.getName()}" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
 </form>
 </body>
 </html>

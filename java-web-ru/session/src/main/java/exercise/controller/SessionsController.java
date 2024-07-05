@@ -5,35 +5,36 @@ import exercise.dto.MainPage;
 import exercise.dto.LoginPage;
 import exercise.repository.UsersRepository;
 import static exercise.util.Security.encrypt;
+import exercise.util.NamedRoutes;
 
-import exercise.model.User;
 import io.javalin.http.Context;
 
 public class SessionsController {
 
     // BEGIN
     public static void build(Context ctx) {
-        ctx.render("sessions/build.jte", model("page", new LoginPage(null, null)));
+        ctx.render("build.jte", model("page", new LoginPage("", "")));
     }
 
+    // Процесс логина
     public static void create(Context ctx) {
-        String username = ctx.formParam("username");
-        String password = ctx.formParam("password");
+        var nickname = ctx.formParam("nickname");
+        var password = ctx.formParam("password");
 
-        User user = UsersRepository.findByName(username);
-
-        if (user != null && user.getPassword().equals(encrypt(password))) {
-            ctx.sessionAttribute("currentUser", username);
-            ctx.redirect(exercise.util.NamedRoutes.rootPath());
-        } else {
-            var page = new LoginPage(username, "Wrong username or password");
-            ctx.render("sessions/build.jte", model("page", page));
+        var user = UsersRepository.findByName(nickname);
+        if (user == null || !user.getPassword().equals(encrypt(password))) {
+            ctx.render("build.jte", model("page", new LoginPage(nickname, "Wrong username or password")));
+            return;
         }
+
+        ctx.sessionAttribute("currentUser", nickname);
+        ctx.redirect(NamedRoutes.rootPath());
     }
 
+    // Процесс выхода из аккаунта
     public static void destroy(Context ctx) {
         ctx.sessionAttribute("currentUser", null);
-        ctx.redirect(exercise.util.NamedRoutes.rootPath());
+        ctx.redirect(NamedRoutes.rootPath());
     }
     // END
 }
