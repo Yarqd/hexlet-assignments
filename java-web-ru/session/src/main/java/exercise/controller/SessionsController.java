@@ -20,6 +20,9 @@ public class SessionsController {
         var nickname = ctx.formParam("nickname");
         var password = ctx.formParam("password");
 
+        System.out.println("Nickname: " + nickname);
+        System.out.println("Password: " + password);
+
         var user = UsersRepository.findByName(nickname);
         if (user == null || !user.getPassword().equals(encrypt(password))) {
             ctx.render("build.jte", model("page", new LoginPage(nickname, "Wrong username or password")));
