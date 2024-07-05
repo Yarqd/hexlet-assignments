@@ -2,11 +2,9 @@ package exercise.controller;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 import exercise.dto.LoginPage;
-import exercise.model.User;
 import exercise.repository.UsersRepository;
-import static exercise.util.Security.encrypt;
 import exercise.util.NamedRoutes;
-
+import exercise.util.Security;
 import io.javalin.http.Context;
 
 public class SessionsController {
@@ -17,11 +15,11 @@ public class SessionsController {
     }
 
     public static void create(Context ctx) {
-        var username = ctx.formParam("username");
-        var password = ctx.formParam("password");
+        String username = ctx.formParam("username");
+        String password = ctx.formParam("password");
 
-        User user = UsersRepository.findByName(username);
-        if (user != null && user.getPassword().equals(encrypt(password))) {
+        var user = UsersRepository.findByName(username);
+        if (user != null && user.getPassword().equals(Security.encrypt(password))) {
             ctx.sessionAttribute("currentUser", username);
             ctx.redirect(NamedRoutes.rootPath());
         } else {

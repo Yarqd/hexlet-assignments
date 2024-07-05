@@ -8,7 +8,7 @@ content = @`
     @if(page.getName() == null)
         <a href="${NamedRoutes.buildSessionPath()}">Login</a>
     @else
-        <p>Hello, ${page.getName().toString()}</p>
+        <p>Hello, ${page.getName()}</p>
         <form action="${NamedRoutes.logoutPath()}" method="post">
             <button type="submit">Logout</button>
         </form>
