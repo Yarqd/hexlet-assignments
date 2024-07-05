@@ -15,7 +15,7 @@
     <p style="color: red;">${page.getError()}</p>
 @endif
 <form action="${NamedRoutes.loginPath()}" method="post">
-    <input type="text" name="nickname" placeholder="Nickname" value="${page.getName()}" required>
+    <input type="text" name="name" placeholder="Nickname" value="${page.getName()}" required>
     <input type="password" name="password" placeholder="Password" required>
     <button type="submit">Login</button>
 </form>

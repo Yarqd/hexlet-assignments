@@ -17,7 +17,7 @@ public class SessionsController {
 
     // Процесс логина
     public static void create(Context ctx) {
-        var nickname = ctx.formParam("nickname");
+        var nickname = ctx.formParam("name");
         var password = ctx.formParam("password");
 
         System.out.println("Nickname: " + nickname);
