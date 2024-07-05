@@ -1,7 +1,6 @@
 package exercise.controller;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
-import exercise.dto.MainPage;
 import exercise.dto.LoginPage;
 import exercise.repository.UsersRepository;
 import static exercise.util.Security.encrypt;
@@ -28,7 +27,7 @@ public class SessionsController {
         }
 
         ctx.sessionAttribute("currentUser", nickname);
-        ctx.redirect(NamedRoutes.rootPath());
+        ctx.redirect(NamedRoutes.rootPath()); // Редирект после успешного логина
     }
 
     // Процесс выхода из аккаунта
