@@ -2,7 +2,6 @@
 @import exercise.dto.LoginPage
 @param LoginPage page
 
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
