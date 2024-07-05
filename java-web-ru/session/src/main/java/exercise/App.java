@@ -17,12 +17,14 @@ public final class App {
         });
 
         // BEGIN
+        // Маршруты для сессий
         app.get(NamedRoutes.buildSessionPath(), SessionsController::build);
         app.post(NamedRoutes.loginPath(), SessionsController::create);
         app.post(NamedRoutes.logoutPath(), SessionsController::delete);
 
+        // Главная страница
         app.get(NamedRoutes.rootPath(), ctx -> {
-            String currentUser = ctx.sessionAttribute("currentUser");
+            Object currentUser = ctx.sessionAttribute("currentUser");
             var page = new MainPage(currentUser);
             ctx.render("index.jte", model("page", page));
         });
