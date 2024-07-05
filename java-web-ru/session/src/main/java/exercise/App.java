@@ -24,7 +24,7 @@ public final class App {
 
         // Главная страница
         app.get(NamedRoutes.rootPath(), ctx -> {
-            Object currentUser = ctx.sessionAttribute("currentUser");
+            String currentUser = (String) ctx.sessionAttribute("currentUser");
             var page = new MainPage(currentUser);
             ctx.render("index.jte", model("page", page));
         });
