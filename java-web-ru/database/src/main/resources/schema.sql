@@ -7,3 +7,6 @@ CREATE TABLE products (
 );
 
 INSERT INTO products (title, price) VALUES
+('Product1', 19.99),
+('Product2', 29.99),
+('Product3', 39.99);
