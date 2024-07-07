@@ -5,5 +5,3 @@ CREATE TABLE products (
     title VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL
 );
-
-INSERT INTO products (title, price) VALUES;
