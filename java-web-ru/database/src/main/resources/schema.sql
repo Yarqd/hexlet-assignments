@@ -6,7 +6,4 @@ CREATE TABLE products (
     price DECIMAL(10, 2) NOT NULL
 );
 
-INSERT INTO products (title, price) VALUES
-('Product1', 19.99),
-('Product2', 29.99),
-('Product3', 39.99);
+INSERT INTO products (title, price) VALUES;
