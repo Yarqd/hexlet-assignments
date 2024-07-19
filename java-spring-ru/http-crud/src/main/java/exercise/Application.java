@@ -27,10 +27,10 @@ public class Application {
     }
 
     // BEGIN
-    @GetMapping("/posts") // список всех постов
-    public List<Post> index(@RequestParam(defaultValue = "10") Integer limit) {
-        return posts.stream().limit(limit).toList();
-    }
+//    @GetMapping("/posts") // список всех постов
+//    public List<Post> index(@RequestParam(defaultValue = "10") Integer limit) {
+//        return posts.stream().limit(limit).toList();
+//    }
 
     @GetMapping("/posts/{id}") // просмотр конкретного поста
     public Optional<Post> show(@PathVariable String id) {
