@@ -53,9 +53,9 @@ public class Application {
                 .findFirst();
         if (maybePost.isPresent()) {
             var post = maybePost.get();
-            page.setSlug(data.getId());
-            page.setName(data.getTitle());
-            page.setBody(data.getBody());
+            post.setSlug(data.getId());
+            post.setName(data.getTitle());
+            post.setBody(data.getBody());
         }
         return data;
     }
