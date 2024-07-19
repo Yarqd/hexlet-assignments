@@ -35,7 +35,7 @@ public class Application {
     @GetMapping("/posts/{id}") // просмотр конкретного поста
     public Optional<Post> show(@PathVariable String id) {
         var post = posts.stream()
-                .filter(p -> p.getSlug().equals(id))
+                .filter(p -> p.getId().equals(id))
                 .findFirst();
         return post;
     }
@@ -49,12 +49,12 @@ public class Application {
     @PutMapping("/posts/{id}") // обновление поста
     public Post update(@PathVariable String id, @RequestBody Post data) {
         var maybePost = posts.stream()
-                .filter(p -> p.getSlug().equals(id))
+                .filter(p -> p.getId().equals(id))
                 .findFirst();
         if (maybePost.isPresent()) {
             var post = maybePost.get();
-            page.setSlug(data.getSlug());
-            page.setName(data.getName());
+            page.setSlug(data.getId());
+            page.setName(data.getTitle());
             page.setBody(data.getBody());
         }
         return data;
@@ -62,7 +62,7 @@ public class Application {
 
     @DeleteMapping("/posts/{id}") // удаление поста
     public void destroy(@PathVariable String id) {
-        posts.removeIf(p -> p.getSlug().equals(id));
+        posts.removeIf(p -> p.getId().equals(id));
     }
 
     @GetMapping("/posts") // Доп. задание
