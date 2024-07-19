@@ -53,8 +53,8 @@ public class Application {
                 .findFirst();
         if (maybePost.isPresent()) {
             var post = maybePost.get();
-            post.setSlug(data.getId());
-            post.setName(data.getTitle());
+            post.setId(data.getId());
+            post.setTitle(data.getTitle());
             post.setBody(data.getBody());
         }
         return data;
