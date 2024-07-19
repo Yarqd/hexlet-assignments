@@ -27,42 +27,57 @@ public class Application {
     }
 
     // BEGIN
-    @GetMapping("/posts")
+    @GetMapping("/posts") // список всех постов
     public List<Post> index(@RequestParam(defaultValue = "10") Integer limit) {
         return posts.stream().limit(limit).toList();
     }
 
-    @PostMapping("/posts")
+    @GetMapping("/posts/{id}") // просмотр конкретного поста
+    public Optional<Post> show(@PathVariable String id) {
+        var post = posts.stream()
+                .filter(p -> p.getSlug().equals(id))
+                .findFirst();
+        return post;
+    }
+
+    @PostMapping("/posts") // создание нового поста
     public Post create(@RequestBody Post post) {
         posts.add(post);
         return post;
     }
 
-    @GetMapping("/posts/{id}")
-    public Optional<Post> show(@PathVariable String id) {
-        var post = posts.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst();
-        return post;
-    }
-
-    @PutMapping("/posts/{id}")
+    @PutMapping("/posts/{id}") // обновление поста
     public Post update(@PathVariable String id, @RequestBody Post data) {
         var maybePost = posts.stream()
-                .filter(p -> p.getId().equals(id))
+                .filter(p -> p.getSlug().equals(id))
                 .findFirst();
         if (maybePost.isPresent()) {
             var post = maybePost.get();
-            post.setId(data.getId());
-            post.setTitle(data.getTitle());
-            post.setBody(data.getBody());
+            page.setSlug(data.getSlug());
+            page.setName(data.getName());
+            page.setBody(data.getBody());
         }
         return data;
     }
 
-    @DeleteMapping("/posts/{id}")
+    @DeleteMapping("/posts/{id}") // удаление поста
     public void destroy(@PathVariable String id) {
-        posts.removeIf(p -> p.getId().equals(id));
+        posts.removeIf(p -> p.getSlug().equals(id));
+    }
+
+    @GetMapping("/posts") // Доп. задание
+    public List<Post> index(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit) {
+
+        int fromIndex = (page - 1) * limit;
+        int toIndex = Math.min(fromIndex + limit, posts.size());
+
+        if (fromIndex > posts.size()) {
+            return List.of(); // если fromIndex больше размера списка, возвращаем пустой список
+        }
+
+        return posts.subList(fromIndex, toIndex);
     }
     // END
 }
