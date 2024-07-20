@@ -14,6 +14,8 @@ import exercise.model.Post;
 import exercise.Data;
 
 // BEGIN
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/api/users/{id}/posts")
 public class PostsController {
@@ -21,16 +23,13 @@ public class PostsController {
 
     @GetMapping
     public List<Post> getUserPosts(@PathVariable int id) {
-        // Используем простой массив вместо ArrayList и Collectors.toList()
-        Post[] userPostsArray = new Post[posts.size()];
-        int index = 0;
+        List<Post> userPosts = new ArrayList<>();
         for (Post post : posts) {
             if (post.getUserId() == id) {
-                userPostsArray[index++] = post;
+                userPosts.add(post);
             }
         }
-        // Создаем новый список из массива
-        return List.of(userPostsArray).subList(0, index);
+        return userPosts;
     }
 
     @PostMapping
