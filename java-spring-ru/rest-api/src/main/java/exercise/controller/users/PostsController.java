@@ -14,8 +14,6 @@ import exercise.model.Post;
 import exercise.Data;
 
 // BEGIN
-import java.util.ArrayList;
-
 @RestController
 @RequestMapping("/api/users/{id}/posts")
 public class PostsController {
