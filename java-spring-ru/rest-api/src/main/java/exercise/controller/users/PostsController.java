@@ -14,6 +14,8 @@ import exercise.model.Post;
 import exercise.Data;
 
 // BEGIN
+import org.springframework.http.ResponseEntity;
+
 @RestController
 @RequestMapping("/api/users/{id}/posts")
 public class PostsController {
