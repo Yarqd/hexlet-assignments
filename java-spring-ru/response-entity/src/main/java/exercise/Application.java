@@ -40,7 +40,7 @@ public class Application {
     @PostMapping("/posts") // создание нового поста
     public ResponseEntity<Post> create(@RequestBody Post post) {
         posts.add(post);
-        return post;
+        return ResponseEntity.of(post);
     }
 
     @PutMapping("/posts/{id}") // обновление поста
@@ -57,11 +57,6 @@ public class Application {
         return ResponseEntity.status("204");
     }
 
-    @DeleteMapping("/posts/{id}") // удаление поста
-    public void destroy(@PathVariable String id) {
-        posts.removeIf(p -> p.getId().equals(id));
-    }
-
     @GetMapping("/posts")
     public ResponseEntity<List<Post>> index(@RequestParam(defaultValue = "10") Integer limit) {
         var result = posts.stream().limit(limit).toList();
@@ -69,9 +64,6 @@ public class Application {
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(pages.size()))
                 .body(result);
-    }
-
-        return posts.subList(fromIndex, toIndex);
     }
     // END
 
