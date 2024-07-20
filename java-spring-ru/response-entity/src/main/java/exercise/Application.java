@@ -30,17 +30,17 @@ public class Application {
 
     // BEGIN
     @GetMapping("/posts/{id}") // просмотр конкретного поста
-    public ResponseEntity<Post> show(@PathVariable String id) {
+    public ResponseEntity <Post> show(@PathVariable String id) {
         var post = posts.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
-        return ResponseEntity.of(page);
+        return ResponseEntity.of(post);
     }
 
     @PostMapping("/posts") // создание нового поста
     public ResponseEntity<Post> create(@RequestBody Post post) {
         posts.add(post);
-        return ResponseEntity.of(post);
+        return ResponseEntity.created(URI.create("/posts/" + post.getId())).body(post);
     }
 
     @PutMapping("/posts/{id}") // обновление поста
@@ -53,8 +53,9 @@ public class Application {
             post.setId(data.getId());
             post.setTitle(data.getTitle());
             post.setBody(data.getBody());
+            return ResponseEntity.ok(post);
         }
-        return ResponseEntity.status("204");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/posts")
@@ -62,7 +63,7 @@ public class Application {
         var result = posts.stream().limit(limit).toList();
 
         return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(pages.size()))
+                .header("X-Total-Count", String.valueOf(posts.size()))
                 .body(result);
     }
     // END
