@@ -14,26 +14,24 @@ import exercise.model.Post;
 import exercise.Data;
 
 // BEGIN
-import org.springframework.http.ResponseEntity;
-
 @RestController
 @RequestMapping("/api/users/{id}/posts")
 public class PostsController {
     private List<Post> posts = Data.getPosts();
 
     @GetMapping
-    public ResponseEntity<List<Post>> getUserPosts(@PathVariable int id) {
-        List<Post> userPosts = posts.stream()
+    public List<Post> getUserPosts(@PathVariable int id) {
+        return posts.stream()
                 .filter(post -> post.getUserId() == id)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(userPosts);
     }
 
     @PostMapping
-    public ResponseEntity<Post> createUserPost(@PathVariable int id, @RequestBody Post post) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post createUserPost(@PathVariable int id, @RequestBody Post post) {
         post.setUserId(id);
         posts.add(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body(post);
+        return post;
     }
 }
 // END
