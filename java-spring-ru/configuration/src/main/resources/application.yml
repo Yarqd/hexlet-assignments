@@ -1,12 +1,14 @@
 ---
 # BEGIN
-spring:
+logging:
+  level:
+    root: WARN
   output:
     ansi:
       enabled: always
 
 server:
-  port : 7070
+  port: 7070
 # END
 
 users:
@@ -14,4 +16,3 @@ users:
     - gjoinsey1@blogger.com
     - scrosi4@cam.ac.uk
     - brundle@cam.ac.uk
-
