@@ -21,10 +21,13 @@ public class Application {
     private List<User> users = Data.getUsers();
 
     // BEGIN
+    @Autowired
+    private UserProperties userProperties;
+
     @GetMapping("/admins")
     public List<String> getAdmins() {
         List<String> adminEmails = userProperties.getAdmins();
-        List<String> adminNames = new ArrayList<>();
+        List<String> adminNames = new java.util.ArrayList<>();
 
         for (User user : users) {
             if (adminEmails.contains(user.getEmail())) {
