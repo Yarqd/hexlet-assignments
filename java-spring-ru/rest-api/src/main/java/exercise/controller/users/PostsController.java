@@ -21,14 +21,16 @@ public class PostsController {
 
     @GetMapping
     public List<Post> getUserPosts(@PathVariable int id) {
-        // Используем простой цикл вместо стримов и Collectors.toList()
-        List<Post> userPosts = new ArrayList<>();
+        // Используем простой массив вместо ArrayList и Collectors.toList()
+        Post[] userPostsArray = new Post[posts.size()];
+        int index = 0;
         for (Post post : posts) {
             if (post.getUserId() == id) {
-                userPosts.add(post);
+                userPostsArray[index++] = post;
             }
         }
-        return userPosts;
+        // Создаем новый список из массива
+        return List.of(userPostsArray).subList(0, index);
     }
 
     @PostMapping
