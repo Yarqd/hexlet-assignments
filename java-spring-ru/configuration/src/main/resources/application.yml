@@ -1,11 +1,9 @@
 ---
 # BEGIN
-logging:
-  level:
-    root: WARN
+spring:
   output:
     ansi:
-      enabled: always
+      enabled:
 
 server:
   port : 7070

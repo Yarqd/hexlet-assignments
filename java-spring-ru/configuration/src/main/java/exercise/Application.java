@@ -22,7 +22,7 @@ public class Application {
 
     // BEGIN
     @Autowired
-    private AdminProperties adminProperties;
+    private UserProperties userProperties;
 
     @GetMapping("/admins")
     public List<String> getAdmins() {
