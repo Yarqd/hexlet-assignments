@@ -21,9 +21,14 @@ public class PostsController {
 
     @GetMapping
     public List<Post> getUserPosts(@PathVariable int id) {
-        return posts.stream()
-                .filter(post -> post.getUserId() == id)
-                .collect(Collectors.toList());
+        // Используем простой цикл вместо стримов и Collectors.toList()
+        List<Post> userPosts = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getUserId() == id) {
+                userPosts.add(post);
+            }
+        }
+        return userPosts;
     }
 
     @PostMapping
