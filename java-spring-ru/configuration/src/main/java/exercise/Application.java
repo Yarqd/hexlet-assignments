@@ -21,14 +21,19 @@ public class Application {
     private List<User> users = Data.getUsers();
 
     // BEGIN
-    @Autowired
-    private UserProperties userProperties;
-
     @GetMapping("/admins")
     public List<String> getAdmins() {
-        return userProperties.getAdmins().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        List<String> adminEmails = userProperties.getAdmins();
+        List<String> adminNames = new ArrayList<>();
+
+        for (User user : users) {
+            if (adminEmails.contains(user.getEmail())) {
+                adminNames.add(user.getName());
+            }
+        }
+
+        adminNames.sort(String::compareTo);
+        return adminNames;
     }
     // END
 
