@@ -29,43 +29,49 @@ public class Application {
     }
 
     // BEGIN
-    @GetMapping("/posts")
-    public ResponseEntity<List<Post>> index(@RequestParam(defaultValue = "10") Integer limit) {
-        var result = posts.stream().limit(limit).toList();
-
-        return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(posts.size()))
-                .body(result);
-    }
-
-    @GetMapping("/posts/{id}")
+    @GetMapping("/posts/{id}") // просмотр конкретного поста
     public ResponseEntity<Post> show(@PathVariable String id) {
         var post = posts.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
-        return post.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return ResponseEntity.of(page);
     }
 
-    @PostMapping("/posts")
+    @PostMapping("/posts") // создание нового поста
     public ResponseEntity<Post> create(@RequestBody Post post) {
         posts.add(post);
-        return ResponseEntity.status(HttpStatus.CREATED).body(post);
+        return post;
     }
 
-    @PutMapping("/posts/{id}")
-    public ResponseEntity<Post> update(@PathVariable String id, @RequestBody Post data) {
+    @PutMapping("/posts/{id}") // обновление поста
+    public ResponseEntity <Post> update(@PathVariable String id, @RequestBody Post data) {
         var maybePost = posts.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
         if (maybePost.isPresent()) {
             var post = maybePost.get();
+            post.setId(data.getId());
             post.setTitle(data.getTitle());
             post.setBody(data.getBody());
-            return ResponseEntity.ok(post);
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
+        return ResponseEntity.status("204");
+    }
+
+    @DeleteMapping("/posts/{id}") // удаление поста
+    public void destroy(@PathVariable String id) {
+        posts.removeIf(p -> p.getId().equals(id));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<Post>> index(@RequestParam(defaultValue = "10") Integer limit) {
+        var result = posts.stream().limit(limit).toList();
+
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(pages.size()))
+                .body(result);
+    }
+
+        return posts.subList(fromIndex, toIndex);
     }
     // END
 
