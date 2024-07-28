@@ -29,7 +29,7 @@ public class PeopleController {
     }
 
     // BEGIN
-    @GetMapping(path = "/people")
+    @GetMapping("/people")
     public Person show(@PathVariable) {
         return personRepository.findAll();
     }
