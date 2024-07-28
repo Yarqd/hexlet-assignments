@@ -1,27 +1,27 @@
 package exercise.model;
 
+import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import lombok.Getter;
 import lombok.Setter;
 
 // BEGIN
 @Entity
-@Table(name = "people")
+@Table(name = "users")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Person {
+public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
     private String firstName;
+
     private String lastName;
 }
 // END
