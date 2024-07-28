@@ -10,7 +10,7 @@ import lombok.Setter;
 
 // BEGIN
 @Entity
-@Table(name = "users")
+@Table(name = "person")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

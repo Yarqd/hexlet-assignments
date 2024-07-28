@@ -23,9 +23,9 @@ public class PeopleController {
     @Autowired
     private PersonRepository personRepository;
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public Person show(@PathVariable long id) {
-        return personRepository.findById(id).get();
+        return personRepository.findById(id).orElse(null);
     }
 
     // BEGIN
