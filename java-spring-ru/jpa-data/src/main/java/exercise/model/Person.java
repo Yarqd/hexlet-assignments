@@ -12,13 +12,13 @@ import lombok.Setter;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "person")
+@Table(name = "people")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Person {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
