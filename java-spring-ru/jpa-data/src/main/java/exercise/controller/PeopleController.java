@@ -23,22 +23,22 @@ public class PeopleController {
     @Autowired
     private PersonRepository personRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     public Person show(@PathVariable long id) {
-        return personRepository.findById(id).orElse(null);
+        return personRepository.findById(id).get();
     }
 
     // BEGIN
-    @GetMapping
-    public List<Person> index() {
-        return personRepository.findAll();
-    }
-
-    @PostMapping
+    @PostMapping("/people")
     @ResponseStatus(HttpStatus.CREATED)
-    public Person create(@RequestBody Person person) {
+    public Person create(@Valid @RequestBody Person person) {
         personRepository.save(person);
         return person;
+    }
+
+    @GetMapping(path = "/people")
+    public List<Person> index() {
+        return personRepository.findAll();
     }
 
     @DeleteMapping("/{id}")
