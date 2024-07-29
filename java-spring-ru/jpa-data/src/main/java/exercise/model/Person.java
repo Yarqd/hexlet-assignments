@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 // BEGIN
+import lombok.EqualsAndHashCode;
+
 @Entity
 @Table(name = "person")
 @Getter
