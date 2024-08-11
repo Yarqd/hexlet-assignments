@@ -1,18 +1,21 @@
 package exercise.mapper;
 
-import exercise.dto.CategoryDTO;
 import exercise.dto.CategoryCreateDTO;
+import exercise.dto.CategoryDTO;
 import exercise.model.Category;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+// BEGIN
+@Mapper(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface CategoryMapper {
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "products", ignore = true)
     Category map(CategoryCreateDTO dto);
-
-    CategoryDTO map(Category category);
+    CategoryDTO map(Category model);
 }
+// END

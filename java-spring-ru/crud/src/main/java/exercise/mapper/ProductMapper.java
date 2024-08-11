@@ -6,32 +6,27 @@ import exercise.dto.ProductUpdateDTO;
 import exercise.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
-import org.openapitools.jackson.nullable.JsonNullable;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = {ReferenceMapper.class, CategoryMapper.class})
+// BEGIN
+@Mapper(
+        uses = { ReferenceMapper.class },
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface ProductMapper {
-
-    @Mapping(source = "category.id", target = "categoryId")
-    @Mapping(source = "category.name", target = "categoryName")
-    ProductDTO map(Product product);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "category", source = "categoryId")
     Product map(ProductCreateDTO dto);
 
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "category.name", target = "categoryName")
+    ProductDTO map(Product model);
+
     @Mapping(target = "category", source = "categoryId")
-    void update(ProductUpdateDTO dto, @MappingTarget Product product);
-
-    default String map(JsonNullable<String> value) {
-        return value.orElse(null);
-    }
-
-    default Integer map(JsonNullable<Integer> value) {
-        return value.orElse(null);
-    }
+    void update(ProductUpdateDTO dto, @MappingTarget Product model);
 }
+// END

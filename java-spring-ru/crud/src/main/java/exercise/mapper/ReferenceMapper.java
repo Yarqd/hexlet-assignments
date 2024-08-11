@@ -1,23 +1,23 @@
 package exercise.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.TargetType;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import exercise.model.BaseEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.mapstruct.Mapper;
-import org.mapstruct.ObjectFactory;
-import org.mapstruct.TargetType;
 
-@Mapper(componentModel = "spring", uses = {EntityManager.class})
+// BEGIN
+@Mapper(
+        componentModel = MappingConstants.ComponentModel.SPRING
+)
 public abstract class ReferenceMapper {
-
-    @PersistenceContext
+    @Autowired
     private EntityManager entityManager;
 
-    @ObjectFactory
-    public <T extends BaseEntity> T resolve(Long id, @TargetType Class<T> type) {
-        if (id == null) {
-            return null;
-        }
-        return entityManager.find(type, id);
+    public <T extends BaseEntity> T toEntity(Long id, @TargetType Class<T> entityClass) {
+        return id != null ? entityManager.find(entityClass, id) : null;
     }
 }
+// END
