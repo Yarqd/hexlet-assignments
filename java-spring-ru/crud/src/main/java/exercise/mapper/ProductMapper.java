@@ -31,12 +31,13 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
 
-    default String map(JsonNullable<String> value) {
+    // Измененный метод
+    default String mapString(JsonNullable<String> value) {
         return value.orElse(null);
     }
 
-    default int map(JsonNullable<Integer> value) {
-        return value.orElse(0);
+    default int mapInt(JsonNullable<Integer> value) {
+        return value.orElse(0); // Можно заменить 0 на любое значение по умолчанию
     }
 }
 // END
