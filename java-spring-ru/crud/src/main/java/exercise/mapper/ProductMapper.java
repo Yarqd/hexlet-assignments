@@ -1,6 +1,6 @@
 package exercise.mapper;
 
-import com.fasterxml.jackson.datatype.jsr310.JsonNullable;
+import org.openapitools.jackson.nullable.JsonNullable;
 import exercise.dto.ProductCreateDTO;
 import exercise.dto.ProductDTO;
 import exercise.dto.ProductUpdateDTO;
@@ -31,13 +31,12 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
 
-    // Методы для преобразования JsonNullable
     default String map(JsonNullable<String> value) {
         return value.orElse(null);
     }
 
     default int map(JsonNullable<Integer> value) {
-        return value.orElse(0); // Можно заменить 0 на любое значение по умолчанию
+        return value.orElse(0);
     }
 }
 // END
