@@ -1,5 +1,6 @@
 package exercise.mapper;
 
+import com.fasterxml.jackson.datatype.jsr310.JsonNullable;
 import exercise.dto.ProductCreateDTO;
 import exercise.dto.ProductDTO;
 import exercise.dto.ProductUpdateDTO;
@@ -30,7 +31,7 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
 
-    // Добавьте методы для преобразования JsonNullable
+    // Методы для преобразования JsonNullable
     default String map(JsonNullable<String> value) {
         return value.orElse(null);
     }
