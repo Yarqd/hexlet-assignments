@@ -31,7 +31,6 @@ public interface ProductMapper {
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
 
-    // Измененный метод
     default String mapString(JsonNullable<String> value) {
         return value.orElse(null);
     }
@@ -41,3 +40,4 @@ public interface ProductMapper {
     }
 }
 // END
+

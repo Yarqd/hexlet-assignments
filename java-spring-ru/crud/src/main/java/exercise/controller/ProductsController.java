@@ -29,7 +29,6 @@ public class ProductsController {
     @Autowired
     private ProductMapper productMapper;
 
-    // Получение списка всех продуктов
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ProductDTO> index() {
@@ -39,7 +38,6 @@ public class ProductsController {
                 .toList();
     }
 
-    // Получение конкретного продукта по его ID
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductDTO show(@PathVariable Long id) {
@@ -48,49 +46,40 @@ public class ProductsController {
         return productMapper.map(product);
     }
 
-    // Создание нового продукта
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO create(@Valid @RequestBody ProductCreateDTO productData) {
-        // Проверяем наличие категории
         var category = categoryRepository.findById(productData.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Category ID"));
 
-        // Маппинг DTO в модель
         var product = productMapper.map(productData);
         product.setCategory(category); // Устанавливаем категорию
 
-        // Сохраняем продукт в базе данных
         productRepository.save(product);
         return productMapper.map(product);
     }
 
-    // Обновление информации о продукте
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductDTO update(@RequestBody @Valid ProductUpdateDTO productData, @PathVariable Long id) {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
 
-        // Проверяем наличие категории, если она указана
         var categoryId = productData.getCategoryId().orElse(null);
         var category = categoryId != null ? categoryRepository.findById(categoryId).orElse(null) : null;
         if (category == null && categoryId != null) {
             throw new IllegalArgumentException("Invalid Category ID");
         }
 
-        // Обновляем данные продукта
         productMapper.update(productData, product);
         if (category != null) {
             product.setCategory(category); // Устанавливаем категорию
         }
 
-        // Сохраняем обновленный продукт
         productRepository.save(product);
         return productMapper.map(product);
     }
 
-    // Удаление продукта по его ID
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
