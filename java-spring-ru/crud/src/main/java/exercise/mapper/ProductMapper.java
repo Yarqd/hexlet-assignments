@@ -19,6 +19,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ProductMapper {
+
     @Mapping(target = "category", source = "categoryId")
     Product map(ProductCreateDTO dto);
 
@@ -28,5 +29,14 @@ public interface ProductMapper {
 
     @Mapping(target = "category", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
+
+    // Добавьте методы для преобразования JsonNullable
+    default String map(JsonNullable<String> value) {
+        return value.orElse(null);
+    }
+
+    default int map(JsonNullable<Integer> value) {
+        return value.orElse(0); // Можно заменить 0 на любое значение по умолчанию
+    }
 }
 // END
