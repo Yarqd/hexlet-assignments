@@ -52,11 +52,10 @@ public class ProductsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO create(@Valid @RequestBody ProductCreateDTO productData) {
-        var category = productRepository.findCategoryById(productData.getCategoryId());
-        if (category == null) {
-            throw new IllegalArgumentException("Invalid Category ID");
-        }
+        var category = categoryRepository.findById(productData.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Category ID"));
         var product = productMapper.map(productData);
+        product.setCategory(category); // Устанавливаем категорию
         productRepository.save(product);
         return productMapper.map(product);
     }
@@ -66,11 +65,17 @@ public class ProductsController {
     public ProductDTO update(@RequestBody @Valid ProductUpdateDTO productData, @PathVariable Long id) {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not Found: " + id));
-        var category = productRepository.findCategoryById(productData.getCategoryId().orElse(null));
-        if (category == null && productData.getCategoryId().isPresent()) {
+
+        var categoryId = productData.getCategoryId().orElse(null);
+        var category = categoryId != null ? categoryRepository.findById(categoryId).orElse(null) : null;
+        if (category == null && categoryId != null) {
             throw new IllegalArgumentException("Invalid Category ID");
         }
+
         productMapper.update(productData, product);
+        if (category != null) {
+            product.setCategory(category); // Устанавливаем категорию
+        }
         productRepository.save(product);
         return productMapper.map(product);
     }
