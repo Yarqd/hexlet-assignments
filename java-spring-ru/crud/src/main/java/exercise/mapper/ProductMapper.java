@@ -12,20 +12,27 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 // BEGIN
-@Mapper(
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ProductMapper {
+
     @Mapping(target = "category.id", source = "categoryId")
     Product map(ProductCreateDTO dto);
 
-    @Mapping(source = "category.id", target = "categoryId")
-    @Mapping(source = "category.name", target = "categoryName")
-    ProductDTO map(Product model);
+    @Mapping(target = "categoryId", source = "category.id")
+    ProductDTO map(Product product);
 
-    @Mapping(target = "category.id", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
+
+    default Long map(JsonNullable<Long> value) {
+        return value.orElse(null);
+    }
+
+    default String map(JsonNullable<String> value) {
+        return value.orElse(null);
+    }
+
+    default Integer map(JsonNullable<Integer> value) {
+        return value.orElse(null);
+    }
 }
 // END
