@@ -1,6 +1,5 @@
 package exercise.mapper;
 
-import org.openapitools.jackson.nullable.JsonNullable;
 import exercise.dto.ProductCreateDTO;
 import exercise.dto.ProductDTO;
 import exercise.dto.ProductUpdateDTO;
@@ -14,30 +13,19 @@ import org.mapstruct.ReportingPolicy;
 
 // BEGIN
 @Mapper(
-        uses = { ReferenceMapper.class },
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ProductMapper {
-
-    @Mapping(target = "category", source = "categoryId")
+    @Mapping(target = "category.id", source = "categoryId")
     Product map(ProductCreateDTO dto);
 
     @Mapping(source = "category.id", target = "categoryId")
     @Mapping(source = "category.name", target = "categoryName")
     ProductDTO map(Product model);
 
-    @Mapping(target = "category", source = "categoryId")
+    @Mapping(target = "category.id", source = "categoryId")
     void update(ProductUpdateDTO dto, @MappingTarget Product model);
-
-    default String mapString(JsonNullable<String> value) {
-        return value.orElse(null);
-    }
-
-    default int mapInt(JsonNullable<Integer> value) {
-        return value.orElse(0); // Можно заменить 0 на любое значение по умолчанию
-    }
 }
 // END
-
