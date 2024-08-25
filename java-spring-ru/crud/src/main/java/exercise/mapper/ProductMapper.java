@@ -12,38 +12,23 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 // BEGIN
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ProductMapper {
+@Mapper (
+        uses = { JsonNullableMapper.class, ReferenceMapper.class },
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public abstract class ProductMapper {
+    @Autowired
+    private ReferenceMapper referenceMapper;
+    @Mapping(target = "category", source = "categoryId")
+    public abstract Product map(ProductCreateDTO createDTO);
 
-    @Mapping(source = "categoryId", target = "category.id")
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "price", target = "price")
-    Product toProduct(ProductCreateDTO dto);
+    @Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
+    public abstract ProductDTO map(Product product);
 
-    @Mapping(source = "categoryId", target = "category.id")
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "price", target = "price")
-    Product toProduct(ProductUpdateDTO dto, @MappingTarget Product model);
-
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "category.id", target = "categoryId")
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "price", target = "price")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
-    ProductDTO toProductDTO(Product product);
-
-    // Methods to convert JsonNullable types to primitive types
-    default Long map(JsonNullable<Long> value) {
-        return value.orElse(null);
-    }
-
-    default String map(JsonNullable<String> value) {
-        return value.orElse(null);
-    }
-
-    default Integer map(JsonNullable<Integer> value) {
-        return value.orElse(null);
-    }
+    @Mapping(target = "category", source = "categoryId")
+    public abstract void update(ProductUpdateDTO updateDTO, @MappingTarget Product product);
 }
 // END
