@@ -6,24 +6,34 @@ import exercise.dto.ProductUpdateDTO;
 import exercise.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-//import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 // BEGIN
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ProductMapper {
 
-    @Mapping(target = "category.id", source = "categoryId")
-    Product map(ProductCreateDTO dto);
+    @Mapping(source = "categoryId", target = "category.id")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "price", target = "price")
+    Product toProduct(ProductCreateDTO dto);
 
-    @Mapping(target = "categoryId", source = "category.id")
-    ProductDTO map(Product product);
+    @Mapping(source = "categoryId", target = "category.id")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "price", target = "price")
+    Product toProduct(ProductUpdateDTO dto, @MappingTarget Product model);
 
-    void update(ProductUpdateDTO dto, @MappingTarget Product model);
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "price", target = "price")
+    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "updatedAt", target = "updatedAt")
+    ProductDTO toProductDTO(Product product);
 
+    // Methods to convert JsonNullable types to primitive types
     default Long map(JsonNullable<Long> value) {
         return value.orElse(null);
     }
