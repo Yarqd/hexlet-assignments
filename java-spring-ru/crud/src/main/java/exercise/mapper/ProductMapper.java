@@ -12,23 +12,30 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 // BEGIN
-@Mapper (
+@Mapper(
         uses = { JsonNullableMapper.class, ReferenceMapper.class },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
-public abstract class ProductMapper {
-    @Autowired
-    private ReferenceMapper referenceMapper;
-    @Mapping(target = "category", source = "categoryId")
-    public abstract Product map(ProductCreateDTO createDTO);
+public interface ProductMapper {
+
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "price", source = "price")
+    Product map(ProductCreateDTO createDTO);
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
-    public abstract ProductDTO map(Product product);
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "price", source = "price")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
+    ProductDTO map(Product product);
 
-    @Mapping(target = "category", source = "categoryId")
-    public abstract void update(ProductUpdateDTO updateDTO, @MappingTarget Product product);
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "price", source = "price")
+    void update(ProductUpdateDTO updateDTO, @MappingTarget Product product);
 }
 // END
