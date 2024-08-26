@@ -9,6 +9,7 @@ import exercise.dto.ProductUpdateDTO;
 import exercise.mapper.ProductMapper;
 import exercise.specification.ProductSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +35,9 @@ public class ProductsController {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ProductSpecification specBuilder;
 
     // BEGIN
     @GetMapping(path = "")
