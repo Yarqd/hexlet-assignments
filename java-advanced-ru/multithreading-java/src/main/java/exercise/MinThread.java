@@ -1,5 +1,7 @@
 package exercise;
 
+import java.util.logging.Logger;
+
 // BEGIN
 public class MinThread extends Thread {
     private int[] one;
@@ -23,6 +25,10 @@ public class MinThread extends Thread {
             }
         }
         return min;
+    }
+
+    public int getMinValue() {
+        return minValue;
     }
 }
 // END

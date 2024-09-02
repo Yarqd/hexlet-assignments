@@ -1,5 +1,7 @@
 package exercise;
 
+import java.util.logging.Logger;
+
 // BEGIN
 public class MaxThread extends Thread {
     private int[] two;
@@ -23,6 +25,10 @@ public class MaxThread extends Thread {
             }
         }
         return max;
+    }
+
+    public int getMaxValue() {
+        return maxValue;
     }
 }
 // END
