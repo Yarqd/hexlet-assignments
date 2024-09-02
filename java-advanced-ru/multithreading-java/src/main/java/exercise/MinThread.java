@@ -5,7 +5,7 @@ public class MinThread extends Thread {
     private int[] one;
     private int minValue;
 
-    public Save1(int[] a) {
+    public MinThread(int[] a) {
         this.one = a;
     }
     @Override

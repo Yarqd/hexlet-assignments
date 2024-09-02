@@ -5,7 +5,7 @@ public class MaxThread extends Thread {
     private int[] two;
     private int maxValue;
 
-    public Save2(int[] b) {
+    public MaxThread(int[] b) {
         this.two = b;
     }
     @Override
