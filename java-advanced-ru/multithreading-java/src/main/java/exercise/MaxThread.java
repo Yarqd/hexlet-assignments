@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 public class MaxThread extends Thread {
     private int[] two;
     private int maxValue;
+    private static final Logger LOGGER = Logger.getLogger(MaxThread.class.getName());
 
     public MaxThread(int[] b) {
         this.two = b;

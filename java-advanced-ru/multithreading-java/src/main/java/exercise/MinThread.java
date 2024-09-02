@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 public class MinThread extends Thread {
     private int[] one;
     private int minValue;
+    private static final Logger LOGGER = Logger.getLogger(MinThread.class.getName());
 
     public MinThread(int[] a) {
         this.one = a;
