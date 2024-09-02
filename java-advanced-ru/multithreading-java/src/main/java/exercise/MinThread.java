@@ -2,10 +2,10 @@ package exercise;
 
 // BEGIN
 public class MinThread extends Thread {
-    private int [] one;
+    private int[] one;
     private int minValue;
 
-    public Save1(int [] a) {
+    public Save1(int[] a) {
         this.one = a;
     }
     @Override

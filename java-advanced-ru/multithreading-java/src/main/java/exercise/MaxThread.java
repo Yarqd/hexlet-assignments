@@ -2,10 +2,10 @@ package exercise;
 
 // BEGIN
 public class MaxThread extends Thread {
-    private int [] two;
+    private int[] two;
     private int maxValue;
 
-    public Save2(int [] b) {
+    public Save2(int[] b) {
         this.two = b;
     }
     @Override
