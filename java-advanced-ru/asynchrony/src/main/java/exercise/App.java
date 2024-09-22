@@ -10,7 +10,6 @@ import java.nio.file.StandardOpenOption;
 
 class App {
 
-    // BEGIN
     public static CompletableFuture<String> unionFiles(String sourcePath1, String sourcePath2, String destPath) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -31,6 +30,9 @@ class App {
                 Files.writeString(dest, content1 + content2, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 
                 return "Files have been successfully merged";
+            } catch (NoSuchFileException e) {
+                System.out.println(e.getMessage());  // Выводим имя отсутствующего файла
+                return "Error: File not found";
             } catch (IOException e) {
                 System.out.println("Error occurred: " + e.getMessage());
                 return "Error during file merging";
@@ -57,10 +59,8 @@ class App {
             }
         });
     }
-    // END
 
     public static void main(String[] args) throws Exception {
-        // BEGIN
         CompletableFuture<String> result = unionFiles(
                 "src/main/resources/file1.txt",
                 "src/main/resources/file2.txt",
@@ -70,6 +70,5 @@ class App {
 
         CompletableFuture<Long> size = getDirectorySize("src/main/resources");
         System.out.println("Directory size: " + size.get() + " bytes");
-        // END
     }
 }
