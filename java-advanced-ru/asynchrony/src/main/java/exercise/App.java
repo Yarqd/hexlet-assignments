@@ -4,8 +4,9 @@ import java.util.concurrent.CompletableFuture;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.StandardOpenOption;
 
 class App {
 
@@ -17,8 +18,11 @@ class App {
                 Path path2 = Paths.get(sourcePath2);
                 Path dest = Paths.get(destPath);
 
-                if (!Files.exists(path1) || !Files.exists(path2)) {
-                    throw new IOException("One or more source files do not exist");
+                if (!Files.exists(path1)) {
+                    throw new NoSuchFileException(sourcePath1);
+                }
+                if (!Files.exists(path2)) {
+                    throw new NoSuchFileException(sourcePath2);
                 }
 
                 String content1 = Files.readString(path1);
@@ -69,4 +73,3 @@ class App {
         // END
     }
 }
-
