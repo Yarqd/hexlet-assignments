@@ -31,7 +31,7 @@ class App {
 
                 return "Files have been successfully merged";
             } catch (NoSuchFileException e) {
-                System.out.println(e.getMessage());  // Выводим имя отсутствующего файла
+                System.out.println("NoSuchFileException: " + e.getMessage());  // Добавлен тип исключения
                 return "Error: File not found";
             } catch (IOException e) {
                 System.out.println("Error occurred: " + e.getMessage());
