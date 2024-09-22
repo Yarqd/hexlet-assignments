@@ -1,12 +1,11 @@
 package exercise;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.Arrays;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
-import java.io.File;
 import java.nio.file.StandardOpenOption;
+import java.io.IOException;
 
 class App {
 
