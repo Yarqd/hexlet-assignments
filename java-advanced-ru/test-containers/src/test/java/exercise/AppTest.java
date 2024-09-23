@@ -45,7 +45,8 @@ public class AppTest {
     public static void setProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", database::getJdbcUrl);
         registry.add("spring.datasource.username", database::getUsername);
-        registry.add("spri
+        registry.add("spring.datasource.password", database::getPassword);
+    }
     // END
 
     @Test
